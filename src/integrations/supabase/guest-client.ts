@@ -26,7 +26,10 @@ const tableDefaults: Record<string, AnyRecord[]> = {
   countdowns: [{ id: "50000000-0000-4000-8000-000000000001", user_id: GUEST_ID, title: "Biochemistry midterm", category: "midterm", color: "#e0a07a", target_at: demoDate(12, 9), course_id: DEMO_COURSE_ID, created_at: new Date().toISOString() }],
   focus_sessions: [{ id: "60000000-0000-4000-8000-000000000001", user_id: GUEST_ID, mode: "pomodoro", planned_minutes: 25, actual_minutes: 25, completed: true, pearls: 10, task_id: null, course_id: DEMO_COURSE_ID, started_at: demoDate(-1, 19), ended_at: demoDate(-1, 19) }],
   flashcard_decks: [], flashcards: [], course_notes: [], course_files: [],
-  study_rooms: [], room_members: [], ai_messages: [], user_animals: [
+  study_rooms: [{ id: "80000000-0000-4000-8000-000000000001", user_id: GUEST_ID, name: "NEMO study pond", code: "NEMO25", goal: "Finish this week's study plan", owner_id: GUEST_ID, created_at: new Date().toISOString() }], room_members: [
+    { id: "81000000-0000-4000-8000-000000000001", room_id: "80000000-0000-4000-8000-000000000001", user_id: GUEST_ID, display_name: "You · NEMO", status: "studying", joined_at: new Date().toISOString() },
+    { id: "81000000-0000-4000-8000-000000000002", room_id: "80000000-0000-4000-8000-000000000001", user_id: "friend-fox", display_name: "Lina · Ember", status: "studying", joined_at: new Date().toISOString() },
+  ], ai_messages: [], user_animals: [
     { id: "70000000-0000-4000-8000-000000000001", user_id: GUEST_ID, animal_key: "fox", nickname: "Ember", discovered_at: demoDate(-1, 19) },
     { id: "70000000-0000-4000-8000-000000000002", user_id: GUEST_ID, animal_key: "turtle", nickname: "Pebble", discovered_at: demoDate(-2, 18) },
   ],
@@ -39,9 +42,7 @@ function canUseStorage() {
 function readTable(table: string): AnyRecord[] {
   if (canUseStorage()) {
     const raw = window.localStorage.getItem(STORAGE_PREFIX + table);
-    if (raw) {
-      try { return JSON.parse(raw); } catch { /* recover with an empty table */ }
-    }
+    if (raw) { try { return JSON.parse(raw); } catch { /* recover with an empty table */ } }
   }
   if (!memory.has(table)) memory.set(table, structuredClone(tableDefaults[table] ?? []));
   return memory.get(table)!;
@@ -164,7 +165,7 @@ export function createGuestClient() {
       if (name === "join_room_by_code") {
         const room = readTable("study_rooms").find((item) => item["code"] === String(args?.["_code"] ?? "").toUpperCase());
         if (!room) return { data: null, error: new Error("Room not found") };
-        new QueryBuilder("room_members").insert({ room_id: room["id"], user_id: GUEST_ID, display_name: args?.["_name"] ?? "Guest" });
+        await new QueryBuilder("room_members").insert({ room_id: room["id"], user_id: GUEST_ID, display_name: args?.["_name"] ?? "Guest" });
         return { data: room["id"], error: null };
       }
       return { data: null, error: new Error(`Unsupported local operation: ${name}`) };

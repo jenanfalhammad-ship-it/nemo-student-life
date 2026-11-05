@@ -182,6 +182,8 @@ function CalendarPage() {
     return d.toLocaleDateString(locale, { weekday: "short" });
   });
   const todayKey = keyOf(new Date());
+  const gregorianSelected = selected.toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const hijriSelected = selected.toLocaleDateString("ar-SA-u-ca-islamic", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
@@ -196,6 +198,7 @@ function CalendarPage() {
               "اختر يومًا لعرض فعالياته ومواعيده المحفوظة.",
             )}
           </p>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs"><span className="rounded-full bg-primary/10 px-3 py-1.5 font-medium text-primary">{gregorianSelected}</span><span className="rounded-full bg-sage-soft px-3 py-1.5 font-medium text-primary-deep">{hijriSelected}</span></div>
         </div>
         <Button onClick={openCreate}>
           <Plus />

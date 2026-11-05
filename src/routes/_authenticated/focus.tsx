@@ -8,6 +8,7 @@ import {
   Clock3,
   Pause,
   Play,
+  Plus,
   RotateCcw,
   Sparkles,
   Square,
@@ -19,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useTx } from "@/lib/tx";
+import { ANIMALS } from "@/lib/catalog";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/focus")({
@@ -51,6 +53,9 @@ function FocusPage() {
   const [clockNow, setClockNow] = useState(Date.now());
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState("");
+  const [breakUntil, setBreakUntil] = useState<number | null>(null);
+  const [sessionTodo, setSessionTodo] = useState<string[]>([]);
+  const [todoInput, setTodoInput] = useState("");
 
   const coursesQuery = useQuery({
     queryKey: ["focus-courses", user?.id],
@@ -100,6 +105,7 @@ function FocusPage() {
   const canComplete = !!startedAtMs && activeSeconds >= targetSeconds;
   const clockLabel = `${String(Math.floor(remainingSeconds / 60)).padStart(2, "0")}:${String(remainingSeconds % 60).padStart(2, "0")}`;
   const progress = Math.min(1, activeSeconds / Math.max(1, targetSeconds));
+  const breakSeconds = breakUntil ? Math.max(0, Math.ceil((breakUntil - clockNow) / 1000)) : 0;
   const history = useMemo(() => historyQuery.data ?? [], [historyQuery.data]);
   const todaySessions = history.filter(
     (session) => new Date(session.started_at).toDateString() === new Date().toDateString(),
@@ -185,6 +191,12 @@ function FocusPage() {
         tx("Could not save this session. Please try again.", "تعذر حفظ الجلسة. حاول مرة أخرى."),
       );
       return;
+    }
+    if (completed) {
+      const { data: owned } = await supabase.from("user_animals").select("animal_key").eq("user_id", user.id);
+      const ownedKeys = new Set((owned ?? []).map((animal) => animal.animal_key));
+      const nextAnimal = ANIMALS.find((animal) => !ownedKeys.has(animal.key));
+      if (nextAnimal) await supabase.from("user_animals").insert({ animal_key: nextAnimal.key, nickname: null, discovered_at: new Date().toISOString(), user_id: user.id });
     }
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: ["focus-history", user.id] }),
@@ -442,6 +454,12 @@ function FocusPage() {
                 "لا يُرسل إلا الوقت الذي يقيسه هذا المؤقت، كما تحد قاعدة البيانات الدقائق المسجلة بوقتَي البداية والنهاية.",
               )}
             </p>
+          </Card>
+
+          <Card title={tx("Your session side panel", "لوحتك خلال الجلسة")}>
+            <div className="grid grid-cols-2 gap-2 text-center"><div className="rounded-xl bg-sage-soft/60 p-3"><div className="text-xl font-bold tabular-nums">{clockLabel}</div><div className="text-[11px] text-muted-foreground">{tx("until focus ends", "حتى نهاية التركيز")}</div></div><div className="rounded-xl bg-lavender/50 p-3"><div className="text-xl font-bold tabular-nums">{breakUntil ? `${Math.floor(breakSeconds / 60)}:${String(breakSeconds % 60).padStart(2, "0")}` : "—"}</div><div className="text-[11px] text-muted-foreground">{tx("next break", "البريك القادم")}</div></div></div>
+            <div className="mt-3 flex flex-wrap gap-2"><Button size="sm" variant="outline" onClick={() => setBreakUntil(Date.now() + 5 * 60 * 1000)}><Clock3 className="h-3.5 w-3.5" />{tx("Add 5-min break", "أضف بريك ٥ د")}</Button><Button size="sm" variant="ghost" onClick={() => setBreakUntil(null)}>{tx("Skip break", "تخطي البريك")}</Button></div>
+            <div className="mt-4 border-t pt-3"><p className="mb-2 flex items-center gap-1.5 text-xs font-semibold"><Check className="h-3.5 w-3.5 text-primary" />{tx("Session to-do", "مهام الجلسة")}</p><div className="flex gap-2"><input value={todoInput} onChange={(event) => setTodoInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && todoInput.trim()) { setSessionTodo((items) => [...items, todoInput.trim()]); setTodoInput(""); } }} placeholder={tx("One tiny thing to finish…", "شيء صغير أنجزه الآن…")} className="h-9 min-w-0 flex-1 rounded-lg border bg-background px-2 text-xs" /><Button size="icon" variant="outline" onClick={() => { if (todoInput.trim()) { setSessionTodo((items) => [...items, todoInput.trim()]); setTodoInput(""); } }}><Plus className="h-4 w-4" /></Button></div><div className="mt-2 grid gap-1.5">{sessionTodo.map((item, index) => <button key={`${item}-${index}`} onClick={() => setSessionTodo((items) => items.filter((_, itemIndex) => itemIndex !== index))} className="flex items-center gap-2 rounded-lg bg-muted/50 px-2 py-1.5 text-start text-xs hover:line-through"><span className="h-3 w-3 rounded border" />{item}</button>)}</div></div>
           </Card>
 
           <Card title={tx("Today, from saved sessions", "اليوم، من الجلسات المسجلة")}>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowUpRight,
   Copy,
@@ -8,6 +8,8 @@ import {
   LoaderCircle,
   LockKeyhole,
   Plus,
+  PawPrint,
+  Timer,
   Users,
 } from "lucide-react";
 import { Card, Chip, PageHeader } from "@/components/kit";
@@ -16,6 +18,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useTx } from "@/lib/tx";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ANIMALS } from "@/lib/catalog";
 
 export const Route = createFileRoute("/_authenticated/together")({
   head: () => ({
@@ -451,7 +454,7 @@ function TogetherPage() {
                   </button>
                 </div>
                 <div className="border-t px-4 py-4 sm:px-5">
-                  <h4 className="mb-2 text-xs font-semibold">{t("members")}</h4>
+                  <div className="mb-3 flex items-center justify-between gap-2"><h4 className="text-xs font-semibold">{t("members")}</h4><Link to="/focus" className="inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-medium hover:bg-muted"><Timer className="h-3 w-3" />{tx("Open focus room", "افتح جلسة التركيز")}</Link></div>
                   {room.members.length ? (
                     <ul className="grid gap-2 sm:grid-cols-2">
                       {room.members.map((member) => (
@@ -459,15 +462,18 @@ function TogetherPage() {
                           key={`${member.room_id}-${member.user_id}`}
                           className="flex min-w-0 items-center justify-between gap-2 rounded-lg bg-muted/35 px-3 py-2"
                         >
-                          <span className="truncate text-xs font-medium">
+                          <span className="flex min-w-0 items-center gap-2 truncate text-xs font-medium">
+                            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sage-soft text-lg">{member.user_id === user?.id ? "🐙" : ANIMALS.find((animal) => animal.key === "fox")?.emoji ?? "🦊"}</span>
+                            <span className="truncate">
                             {member.display_name || tx("Member", "عضو")}
                             {member.user_id === user?.id && (
                               <span className="ms-1 text-muted-foreground">
                                 · {tx("you", "أنت")}
                               </span>
                             )}
+                            </span>
                           </span>
-                          <span className="shrink-0 text-[10px] text-muted-foreground">
+                          <span className="flex shrink-0 items-center gap-1 text-[10px] text-muted-foreground"><PawPrint className="h-3 w-3 text-primary" />
                             {member.status === "studying"
                               ? t("studying")
                               : member.status === "break"
