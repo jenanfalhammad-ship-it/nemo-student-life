@@ -1,11 +1,11 @@
 name: Deploy NEMO to GitHub Pages
-
 on:
   workflow_dispatch:
-
+  push:
+    branches:
+      - main
 permissions:
   contents: read
-
 concurrency:
   group: pages
   cancel-in-progress: true
