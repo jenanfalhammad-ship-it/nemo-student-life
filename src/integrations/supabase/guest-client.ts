@@ -9,12 +9,27 @@ type AnyRecord = Record<string, any>;
 const GUEST_ID = "00000000-0000-4000-8000-000000000001";
 const STORAGE_PREFIX = "nemo-guest-db:";
 const memory = new Map<string, AnyRecord[]>();
+const demoDate = (days: number, hour: number) => { const date = new Date(); date.setDate(date.getDate() + days); date.setHours(hour, 0, 0, 0); return date.toISOString(); };
+const DEMO_COURSE_ID = "10000000-0000-4000-8000-000000000001";
+const DEMO_TASKS = [
+  { id: "20000000-0000-4000-8000-000000000001", user_id: GUEST_ID, title: "Review lecture 4 notes", description: "Highlight the three concepts most likely to appear in the quiz.", category: "studying", course_id: DEMO_COURSE_ID, priority: "high", due_at: demoDate(1, 18), estimated_minutes: 45, status: "todo", completed_at: null },
+  { id: "20000000-0000-4000-8000-000000000002", user_id: GUEST_ID, title: "Finish lab report outline", description: "Draft the methods and results sections.", category: "university", course_id: DEMO_COURSE_ID, priority: "urgent", due_at: demoDate(4, 20), estimated_minutes: 60, status: "todo", completed_at: null },
+  { id: "20000000-0000-4000-8000-000000000003", user_id: GUEST_ID, title: "Plan next week's study blocks", description: "Split the exam chapters into small sessions.", category: "projects", course_id: null, priority: "medium", due_at: demoDate(6, 17), estimated_minutes: 30, status: "todo", completed_at: null },
+];
 
 const tableDefaults: Record<string, AnyRecord[]> = {
   profiles: [{ id: GUEST_ID, display_name: "Student", language: "en", theme: "light", session_minutes: 25, daily_focus_goal: 120, show_quran: true, time_format: "12h", week_start: 0, onboarded: true }],
-  courses: [], tasks: [], events: [], reminders: [], countdowns: [], focus_sessions: [],
-  flashcard_decks: [], flashcards: [], course_notes: [], course_files: [], user_animals: [],
-  study_rooms: [], room_members: [], ai_messages: [],
+  courses: [{ id: DEMO_COURSE_ID, user_id: GUEST_ID, name: "Biochemistry", code: "BIO 204", color: "#6b9e8a", instructor: "Dr. Lina", semester: "Fall 2026", description: "Molecular systems and metabolism", archived: false, created_at: new Date().toISOString() }],
+  tasks: DEMO_TASKS,
+  events: [{ id: "30000000-0000-4000-8000-000000000001", user_id: GUEST_ID, title: "Biochemistry lecture", description: "Week 7: enzymes", kind: "lecture", course_id: DEMO_COURSE_ID, starts_at: demoDate(1, 10), ends_at: demoDate(1, 11), location: "Room B12", link: null, recurrence: "none", created_at: new Date().toISOString() }],
+  reminders: [{ id: "40000000-0000-4000-8000-000000000001", user_id: GUEST_ID, title: "Start lab report", description: "A small start today makes deadline week lighter.", category: "academic", priority: "high", remind_at: demoDate(2, 17), repeat: "none", done: false, created_at: new Date().toISOString() }],
+  countdowns: [{ id: "50000000-0000-4000-8000-000000000001", user_id: GUEST_ID, title: "Biochemistry midterm", category: "midterm", color: "#e0a07a", target_at: demoDate(12, 9), course_id: DEMO_COURSE_ID, created_at: new Date().toISOString() }],
+  focus_sessions: [{ id: "60000000-0000-4000-8000-000000000001", user_id: GUEST_ID, mode: "pomodoro", planned_minutes: 25, actual_minutes: 25, completed: true, pearls: 10, task_id: null, course_id: DEMO_COURSE_ID, started_at: demoDate(-1, 19), ended_at: demoDate(-1, 19) }],
+  flashcard_decks: [], flashcards: [], course_notes: [], course_files: [],
+  study_rooms: [], room_members: [], ai_messages: [], user_animals: [
+    { id: "70000000-0000-4000-8000-000000000001", user_id: GUEST_ID, animal_key: "fox", nickname: "Ember", discovered_at: demoDate(-1, 19) },
+    { id: "70000000-0000-4000-8000-000000000002", user_id: GUEST_ID, animal_key: "turtle", nickname: "Pebble", discovered_at: demoDate(-2, 18) },
+  ],
 };
 
 function canUseStorage() {
