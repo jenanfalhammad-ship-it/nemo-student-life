@@ -36,6 +36,7 @@ const FOOT: Item[] = [
 ];
 const MOBILE: Item[] = [
   { to: "/dashboard", k: "home", icon: Home }, { to: "/tasks", k: "tasks", icon: ListChecks },
+  { to: "/courses", k: "courses", icon: BookOpen },
   { to: "/focus", k: "focus", icon: Timer }, { to: "/ask", k: "nemo", icon: MessageCircle },
 ];
 
