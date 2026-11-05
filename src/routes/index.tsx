@@ -77,9 +77,6 @@ function Landing() {
         </div>
         <div className="flex items-center gap-2">
           <Toggles compact />
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/auth">{t("signIn")}</Link>
-          </Button>
         </div>
       </header>
       <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-16 pt-8 sm:px-8 md:grid-cols-2 md:pt-16">
@@ -93,10 +90,10 @@ function Landing() {
           <p className="mt-4 max-w-md text-muted-foreground">{t("landingSub")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <Link to="/auth">{t("getStarted")}</Link>
+              <Link to="/dashboard">{t("getStarted")}</Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link to="/auth">{t("signIn")}</Link>
+              <Link to="/dashboard">{tx("Open NEMO", "فتح نيمو")}</Link>
             </Button>
           </div>
         </div>

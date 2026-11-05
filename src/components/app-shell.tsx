@@ -123,7 +123,7 @@ export function AppShell() {
   const signOut = async () => {
     await qc.cancelQueries(); qc.clear();
     await supabase.auth.signOut();
-    nav({ to: "/auth", replace: true });
+    nav({ to: "/", replace: true });
   };
 
   if (loc.pathname === "/onboarding") return <Outlet />;
