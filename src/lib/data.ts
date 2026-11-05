@@ -21,7 +21,7 @@ export function useRows<K extends TableName>(
   return useQuery({
     queryKey: [table, filter ?? null],
     enabled,
-    refetchInterval,
+    refetchInterval: refetchInterval ?? false,
     queryFn: async (): Promise<Row<K>[]> => {
       let q = sb.from(table).select("*").order(order, { ascending: asc });
       if (filter) q = q.eq(filter[0], filter[1]);
