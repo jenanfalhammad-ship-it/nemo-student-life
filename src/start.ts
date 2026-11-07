@@ -1,7 +1,18 @@
 import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
-import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
+import { supabase } from "@/integrations/supabase/client";
+import { GUEST_ID } from "@/integrations/supabase/guest-client";
+
+// The local adapter has no cloud session. Public inference needs no bearer;
+// authenticated functions still attach the real session and verify it server-side.
+const attachWorkspaceAuth = createMiddleware({ type: "function" }).client(async ({ next }) => {
+  const { data: identity } = await supabase.auth.getUser();
+  if (identity.user?.id === GUEST_ID) return next();
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  return next({ headers: token ? { Authorization: `Bearer ${token}` } : {} });
+});
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
@@ -26,6 +37,6 @@ const csrfMiddleware = createCsrfMiddleware({
 });
 
 export const startInstance = createStart(() => ({
-  functionMiddleware: [attachSupabaseAuth],
+  functionMiddleware: [attachWorkspaceAuth],
   requestMiddleware: [errorMiddleware, csrfMiddleware],
 }));

@@ -1,78 +1,136 @@
-import { useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { CalendarDays, Check, Clock3, ListTodo, Send, Sparkles, Trash2 } from "lucide-react";
-import { Card, Chip, PageHeader } from "@/components/kit";
+import { useServerFn } from "@tanstack/react-start";
+import { useQueryClient } from "@tanstack/react-query";
+import { Check, ListTodo, LoaderCircle, Send, Sparkles, Trash2, X } from "lucide-react";
+import { PageHeader } from "@/components/kit";
 import { Nemo } from "@/components/nemo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useInsert, useRemove, useRows, useUpdate } from "@/lib/data";
+import { useRows } from "@/lib/data";
 import { useTx } from "@/lib/tx";
+import { supabase } from "@/integrations/supabase/client";
+import { GUEST_ID } from "@/integrations/supabase/guest-client";
+import { askLocalNemo, askNemo, confirmNemoDeletes } from "@/lib/nemo-ai.functions";
+import { actionValues, nemoTables, workspaceSchema, type PendingDelete } from "@/lib/nemo-actions";
+import { executeLocalNemoActions, removeLocalNemoItems } from "@/lib/nemo-local";
 
-type Message = { id: number; role: "nemo" | "user"; text: string; action?: "confirm-delete" | "confirm-reminder"; targetId?: string };
-
-type Pending = { kind: "delete" | "reminder"; title: string; id?: string; date?: string } | null;
-
+type Message = { id: string; role: "assistant" | "user"; text: string };
 export const Route = createFileRoute("/_authenticated/ask")({
-  head: () => ({ meta: [{ title: "Ask Nemo — NEMO" }, { name: "description", content: "Nemo can plan and update your workspace." }] }),
-  component: AskNemo,
+  head: () => ({ meta: [
+    { title: "Ask Nemo — Your NEMO study companion" },
+    { name: "description", content: "Chat with Nemo about your tasks, dates and study plans." },
+    { property: "og:title", content: "Ask Nemo — Your NEMO study companion" },
+    { property: "og:description", content: "Your playful study companion for tasks and university life." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  ] }), component: AskNemo,
 });
 
-const nextWeekDate = () => { const d = new Date(); d.setDate(d.getDate() + 7); d.setHours(18, 0, 0, 0); return d.toISOString(); };
-const tomorrowDate = (hour = 18) => { const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(hour, 0, 0, 0); return d.toISOString(); };
-const cleanTitle = (value: string) => value.replace(/^(مهمة|فعالية|موعد|تذكير)\s*/i, "").replace(/^(to do|task|event|reminder)\s*/i, "").trim();
-
 function AskNemo() {
-  const { tx, locale, dir } = useTx();
-  const { data: tasks = [] } = useRows("tasks", { order: "due_at", asc: true });
-  const { data: events = [] } = useRows("events", { order: "starts_at", asc: true });
-  const { data: reminders = [] } = useRows("reminders", { order: "remind_at", asc: true });
-  const { data: countdowns = [] } = useRows("countdowns", { order: "target_at", asc: true });
-  const { data: courses = [] } = useRows("courses", { order: "name", asc: true });
-  const addTask = useInsert("tasks"); const updateTask = useUpdate("tasks"); const removeTask = useRemove("tasks");
-  const addEvent = useInsert("events"); const removeEvent = useRemove("events");
-  const addReminder = useInsert("reminders"); const removeReminder = useRemove("reminders");
+  const { tx, lang, dir } = useTx();
+  const { data: tasks = [] } = useRows("tasks");
+  const { data: events = [] } = useRows("events");
+  const { data: reminders = [] } = useRows("reminders");
+  const { data: countdowns = [] } = useRows("countdowns");
+  const { data: courses = [] } = useRows("courses");
+  const localAsk = useServerFn(askLocalNemo);
+  const cloudAsk = useServerFn(askNemo);
+  const cloudDelete = useServerFn(confirmNemoDeletes);
+  const qc = useQueryClient();
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [pending, setPending] = useState<Pending>(null);
-  const [messages, setMessages] = useState<Message[]>([{ id: 0, role: "nemo", text: tx("Hey! I can see your NEMO workspace and add, update, complete or remove things with your permission. Try: add a task for tomorrow.", "هلا! أنا نيمو، أقدر أشوف مساحة نيمو وأضيف وأعدّل وأنجز وأحذف بإذنك. جربي: أضف مهمة لبكرة.") }]);
+  const [busy, setBusy] = useState(false);
+  const lock = useRef(false);
+  const [pending, setPending] = useState<PendingDelete[]>([]);
+  const [localMode, setLocalMode] = useState(false);
+  const [ready, setReady] = useState(false);
+  const end = useRef<HTMLDivElement>(null);
+  const historyKey = useRef("");
+  useEffect(() => {
+    let active = true;
+    void supabase.auth.getUser().then(({ data }) => {
+      if (!active) return;
+      setLocalMode(data.user?.id === GUEST_ID);
+      historyKey.current = `nemo-chat:${data.user?.id ?? "local"}`;
+      try { const history = JSON.parse(localStorage.getItem(historyKey.current) ?? "[]"); if (Array.isArray(history)) setMessages(history.filter((m) => typeof m.text === "string" && (m.role === "user" || m.role === "assistant")).slice(-100)); } catch { /* empty history */ }
+      setReady(true);
+    });
+    return () => { active = false; };
+  }, []);
+  useEffect(() => { if (ready && historyKey.current) localStorage.setItem(historyKey.current, JSON.stringify(messages.slice(-100))); end.current?.scrollIntoView({ block: "nearest", behavior: "smooth" }); }, [messages, busy, ready]);
+  const append = (text: string) => setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", text }]);
+  const refresh = () => Promise.all(nemoTables.map((table) => qc.invalidateQueries({ queryKey: [table] })));
 
-  const openTasks = useMemo(() => tasks.filter((task) => task.status !== "completed"), [tasks]);
-  const dateText = (value: string | null | undefined) => value ? new Date(value).toLocaleDateString(locale, { weekday: "short", month: "short", day: "numeric" }) : tx("no date", "بدون تاريخ");
-  const add = (message: Message) => setMessages((current) => [...current, message]);
-  const findTask = (title: string) => openTasks.find((task) => task.title.toLowerCase().includes(title.toLowerCase()) || title.toLowerCase().includes(task.title.toLowerCase()));
-  const findEvent = (title: string) => events.find((event) => event.title.toLowerCase().includes(title.toLowerCase()) || title.toLowerCase().includes(event.title.toLowerCase()));
-
-  async function executePending() {
-    if (!pending) return;
-    if (pending.kind === "delete" && pending.id) {
-      const task = tasks.find((item) => item.id === pending.id); const event = events.find((item) => item.id === pending.id); const reminder = reminders.find((item) => item.id === pending.id);
-      if (task) await removeTask.mutateAsync(task.id); else if (event) await removeEvent.mutateAsync(event.id); else if (reminder) await removeReminder.mutateAsync(reminder.id);
-      add({ id: Date.now(), role: "nemo", text: tx(`Done — I removed “${pending.title}”.`, `تم — حذفت «${pending.title}».`) });
-    }
-    if (pending.kind === "reminder") { await addReminder.mutateAsync({ title: pending.title, description: tx("Saved by Nemo from your chat.", "حفظه نيمو من المحادثة."), category: "academic", priority: "high", remind_at: pending.date ?? nextWeekDate(), repeat: "none", done: false }); add({ id: Date.now(), role: "nemo", text: tx("Saved! I’ll remind you at the right time.", "تم الحفظ! بذكرك في الوقت المناسب.") }); }
-    setPending(null);
+  async function confirm() {
+    if (lock.current || !pending.length) return;
+    lock.current = true; setBusy(true);
+    try {
+      const result = localMode ? await removeLocalNemoItems(pending) : await cloudDelete({ data: { items: pending } });
+      await refresh(); setPending([]);
+      append(result.failed ? tx(`Removed ${result.removed} items, but some couldn't be removed.`, `حذفت ${result.removed} عناصر، لكن بعض العناصر ما انحذفت.`) : tx(`Removed ${result.removed} items. A little more breathing room 🐙`, `حذفت ${result.removed} عناصر. كذا صار عندنا مساحة نتنفس 🐙`));
+    } catch { append(tx("Couldn't delete. Nothing else was changed; try again.", "ما قدرت أحذف؛ جربي مرة ثانية 🐙")); }
+    finally { lock.current = false; setBusy(false); }
   }
-
-  async function respond(raw: string) {
-    const text = raw.trim(); const lower = text.toLowerCase();
-    if (/^(نعم|اي|إي|أكيد|موافق|yes|ok|تمام)/i.test(text) && pending) { await executePending(); return; }
-    if (/^(لا|لا خلاص|no|cancel)/i.test(text) && pending) { setPending(null); add({ id: Date.now(), role: "nemo", text: tx("ولا يهمك، ما غيرت أي شيء.", "ولا يهمك، ما غيرت أي شيء.") }); return; }
-
-    const isAddTask = /أضف|ضيف|سجل|add|create/i.test(lower) && /مهمة|task|تو ?دو/i.test(lower);
-    if (isAddTask) { const title = cleanTitle(text.replace(/.*?(مهمة|task|تو ?دو)/i, "")); const due = /بكرة|غدا|tomorrow/i.test(text) ? tomorrowDate() : null; const result = await addTask.mutateAsync({ title: title || tx("New task", "مهمة جديدة"), description: null, due_at: due, estimated_minutes: 30, category: "other", priority: "medium", status: "todo", completed_at: null }); add({ id: Date.now(), role: "nemo", text: tx(`Added “${result[0]?.title ?? title}” to your to-do list${due ? ` — due ${dateText(due)}` : ""}.`, `أضفت «${result[0]?.title ?? title}» لقائمة مهامك${due ? ` — موعدها ${dateText(due)}` : ""}.`) }); return; }
-    const isAddEvent = /أضف|ضيف|سجل|add|create/i.test(lower) && /فعالية|موعد|event|appointment/i.test(lower);
-    if (isAddEvent) { const title = cleanTitle(text.replace(/.*?(فعالية|موعد|event|appointment)/i, "")); const start = /بكرة|غدا|tomorrow/i.test(text) ? tomorrowDate(10) : tomorrowDate(10); const end = new Date(new Date(start).getTime() + 60 * 60 * 1000).toISOString(); await addEvent.mutateAsync({ title: title || tx("New event", "فعالية جديدة"), description: null, starts_at: start, ends_at: end, kind: "appointment", location: null, link: null, recurrence: "none", course_id: null }); add({ id: Date.now(), role: "nemo", text: tx(`Added “${title || "New event"}” to your calendar for ${dateText(start)}.`, `أضفت «${title || "فعالية جديدة"}» لتقويمك في ${dateText(start)}.`) }); return; }
-    const taskToComplete = openTasks.find((task) => /أنجز|خلص|complete|done|تمت/i.test(lower) && lower.includes(task.title.toLowerCase()));
-    if (taskToComplete) { await updateTask.mutateAsync({ id: taskToComplete.id, values: { status: "completed", completed_at: new Date().toISOString() } }); add({ id: Date.now(), role: "nemo", text: tx(`Nice! “${taskToComplete.title}” is marked complete. Tiny win, big energy.`, `يا سلام! علّمت «${taskToComplete.title}» كمكتملة. إنجاز صغير بطاقة كبيرة.`) }); return; }
-    const deletionPhrase = /احذف|شيل|امسح|delete|remove/i.test(lower);
-    if (deletionPhrase) { const title = cleanTitle(text.replace(/.*?(احذف|شيل|امسح|delete|remove)/i, "")); const match = findTask(title) ?? findEvent(title) ?? reminders.find((item) => item.title.toLowerCase().includes(title.toLowerCase())); if (!match) { add({ id: Date.now(), role: "nemo", text: tx("I couldn’t find that item. Tell me its exact title and I’ll look again.", "ما لقيت العنصر. اكتبي عنوانه بالضبط وأنا أبحث عنه مرة ثانية.") }); return; } setPending({ kind: "delete", id: match.id, title: match.title }); add({ id: Date.now(), role: "nemo", text: tx(`I found “${match.title}”. Should I delete it? Reply yes or no.`, `لقيت «${match.title}». أحذفه؟ ردي بنعم أو لا.`) }); return; }
-    if (/ذكرني|ذكّرني|remind/i.test(lower)) { const title = cleanTitle(text.replace(/.*?(ذكرني|ذكّرني|remind)/i, "")) || tx("Review your upcoming deadlines", "راجعي التسليمات القادمة"); setPending({ kind: "reminder", title, date: /بكرة|غدا|tomorrow/i.test(text) ? tomorrowDate() : nextWeekDate() }); add({ id: Date.now(), role: "nemo", text: tx(`I can save a reminder for “${title}”. Reply yes and I’ll add it, or no to cancel.`, `أقدر أحفظ تذكير «${title}». ردي بنعم عشان أضيفه أو لا للإلغاء.`) }); return; }
-    if (/وش|ايش|ماذا|عندي|list|show|what|calendar|جدول|مهام|tasks/i.test(lower)) {
-      const lines = [tx(`You have ${openTasks.length} open tasks, ${events.length} calendar events, ${reminders.filter((r) => !r.done).length} reminders and ${countdowns.length} countdowns.`, `عندك ${openTasks.length} مهام مفتوحة، ${events.length} فعاليات، ${reminders.filter((r) => !r.done).length} تذكيرات و${countdowns.length} عدادات.`), ...openTasks.slice(0, 4).map((task) => `• ${task.title} — ${dateText(task.due_at)}`), ...events.slice(0, 3).map((event) => `• ${event.title} — ${dateText(event.starts_at)}`)]; add({ id: Date.now(), role: "nemo", text: lines.join("\n") }); return; }
-    if (/خطة|plan|ضغط|busy|أسبوع/i.test(lower)) { const plan = openTasks.slice(0, 4).map((task, index) => `${index + 1}. ${task.title} — ${task.estimated_minutes ?? 30} ${tx("min", "دقيقة")}`); add({ id: Date.now(), role: "nemo", text: plan.length ? tx(`I checked your workspace and made a light plan:\n${plan.join("\n")}\n\nStart with the nearest deadline, then take a proper break.`, `راجعت مساحتك وسويت لك خطة خفيفة:\n${plan.join("\n")}\n\nابدئي بأقرب تسليم، وبعدها خذي بريك حقيقي.`) : tx("Your list is clear! Add a task and I’ll help you split it into doable steps.", "قائمتك فاضية! أضيفي مهمة وأنا أقسمها لك لخطوات سهلة." ) }); return; }
-    add({ id: Date.now(), role: "nemo", text: tx("I’m with you. I can list your workspace, add or delete tasks and events, mark tasks done, save reminders, or make a study plan. What should we do first?", "أنا معك. أقدر أعرض مساحتك، أضيف أو أحذف مهام وفعاليات، أعلّم المهام كمكتملة، أحفظ تذكيرات، أو أسوي خطة مذاكرة. وش نبدأ فيه؟") });
+  function cancel() { setPending([]); append(tx("Cancelled. Everything stays right where it is 🐙", "تم، ما حذفت شيء! خليتها مكانها 🐙")); }
+  async function send(value = input) {
+    const text = value.trim();
+    if (!text || lock.current || !ready) return;
+    if (pending.length && /^(نعم|اي|إي|أكيد|موافق|yes|ok|تمام|احذفها)[.!؟\s]*$/i.test(text)) { setInput(""); await confirm(); return; }
+    if (pending.length && /^(لا|لا خلاص|no|cancel|إلغاء)[.!؟\s]*$/i.test(text)) { setInput(""); cancel(); return; }
+    lock.current = true; setBusy(true); setInput(""); setPending([]);
+    const next: Message[] = [...messages, { id: crypto.randomUUID(), role: "user", text }];
+    setMessages(next);
+    try {
+      const data = { messages: next.slice(-16).map(({ role, text: content }) => ({ role, text: content.slice(0, 2000) })), lang, tz: Intl.DateTimeFormat().resolvedOptions().timeZone, nowLocal: new Date().toISOString() };
+      const workspace = workspaceSchema.parse({ tasks, events, reminders, countdowns, courses });
+      const result = localMode ? await localAsk({ data: { ...data, workspace } }) : await cloudAsk({ data });
+      let failed = false;
+      if (localMode && result.actions && !result.error) {
+        for (const action of result.actions) if (action.op === "create" || action.op === "update") actionValues(action);
+        const execution = await executeLocalNemoActions(result.actions, workspace);
+        failed = execution.failed;
+      }
+      await refresh();
+      setPending(result.pendingDeletes);
+      append(failed ? tx("Some changes couldn't be saved. Check your list before retrying 🐙", "بعض التغييرات ما انحفظت. راجعي قائمتك قبل إعادة الطلب 🐙") : result.reply);
+    } catch { append(tx("My ink got tangled 🐙 Please try again.", "تلخبط الحبر عندي 🐙 جربي مرة ثانية.")); setInput(text); }
+    finally { lock.current = false; setBusy(false); }
   }
-
-  const send = async (value = input) => { const text = value.trim(); if (!text) return; add({ id: Date.now(), role: "user", text }); setInput(""); await respond(text); };
-  return <div dir={dir} className="mx-auto w-full max-w-5xl pb-10"><PageHeader title={tx("Ask Nemo", "اسأل نيمو")} sub={tx("A real workspace companion: ask, plan, add, update and tidy up.", "رفيق مساحة حقيقي: اسألي، خططي، أضيفي، عدّلي ورتبي.")} /><section className="relative mb-5 overflow-hidden rounded-3xl border bg-gradient-to-br from-[#ffe5dc] via-card to-[#e7e0f8] dark:from-primary/15 dark:via-card dark:to-accent/20 p-5 shadow-sm sm:p-7"><div className="relative flex items-center gap-4"><Nemo mood="happy" float className="h-20 w-20 shrink-0" /><div><Chip className="bg-white/70 dark:bg-card/70"><Sparkles className="me-1 h-3 w-3" />{tx("Nemo is listening", "نيمو يسمعك")}</Chip><h2 className="mt-2 text-xl font-bold">{tx("Tell me what’s on your mind — I’ll help you make it lighter.", "قولي لي وش في بالك — وأنا أساعدك نخليه أخف.")}</h2></div></div></section><div className="grid gap-5 lg:grid-cols-[1fr_270px]"><Card className="overflow-hidden p-0"><div className="max-h-[560px] space-y-4 overflow-y-auto p-4 sm:p-6">{messages.map((message) => <div key={message.id} className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}><div className={`max-w-[90%] rounded-2xl px-4 py-3 text-sm leading-6 whitespace-pre-line ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted/70"}`}>{message.role === "nemo" && <div className="mb-1 flex items-center gap-1 text-xs font-semibold text-primary"><Sparkles className="h-3 w-3" />NEMO</div>}{message.text}</div></div>)}</div><div className="border-t bg-muted/20 p-3"><div className="flex gap-2"><Input value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") void send(); }} placeholder={tx("Try: أضف مهمة أراجع المحاضرة بكرة…", "جربي: أضف مهمة أراجع المحاضرة بكرة…")} /><Button size="icon" onClick={() => void send()} aria-label={tx("Send", "إرسال")}><Send /></Button></div></div></Card><aside className="space-y-3"><Card title={tx("I can do this", "أقدر أسوي هذا")}><div className="grid gap-2 text-sm"><Quick icon={ListTodo} text={tx("وش عندي؟", "وش عندي؟")} onClick={() => void send("وش عندي؟")} /><Quick icon={CalendarDays} text={tx("أضف فعالية بكرة", "أضف فعالية بكرة")} onClick={() => void send("أضف فعالية بكرة")} /><Quick icon={Check} text={tx("سوي لي خطة", "سوي لي خطة")} onClick={() => void send("سوي لي خطة")} /><Quick icon={Clock3} text={tx("ذكرني الأسبوع الجاي", "ذكرني الأسبوع الجاي")} onClick={() => void send("ذكرني بمراجعة التسليم الأسبوع الجاي")} /><Quick icon={Trash2} text={tx("احذف مهمة", "احذف مهمة")} onClick={() => void send("احذف Review lecture 4 notes")} /></div></Card><Card><p className="text-xs leading-5 text-muted-foreground">{tx(`${openTasks.length} open tasks · ${events.length} events · ${courses.length} courses`, `${openTasks.length} مهام مفتوحة · ${events.length} فعاليات · ${courses.length} مواد`)}</p><p className="mt-2 text-xs leading-5 text-muted-foreground">{tx("Nemo asks before destructive actions. It never silently deletes anything.", "نيمو يستأذن قبل الحذف، وما يحذف أي شيء بصمت.")}</p></Card></aside></div></div>;
+  const suggestions = [tx("What are my tasks today?", "وش مهامي اليوم؟"), tx("Add a math study task today at 1 PM", "ضيف مهمة لليوم الساعة ١ اسمها مذاكره رياضيات"), tx("Help me plan my week", "ساعدني أخطط أسبوعي")];
+  return <div dir={dir} className="mx-auto w-full max-w-5xl pb-10">
+    <PageHeader title={tx("Ask Nemo", "اسأل نيمو")} />
+    <section className="mb-6 flex items-center gap-4 border-b pb-5">
+      <Nemo mood="happy" float className="h-20 w-20 shrink-0" />
+      <div className="min-w-0"><p className="text-xl font-bold">{tx("Eight arms. Always on your side.", "ثمانية أذرع، وكلها بصفّك 🐙")}</p>
+        {localMode && <p className="mt-2 text-xs text-muted-foreground">{tx("Local workspace · saved on this device", "مساحة محلية · محفوظة على هذا الجهاز")}</p>}
+      </div>
+    </section>
+    <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]">
+      <section className="min-w-0 overflow-hidden rounded-lg border bg-card">
+        <div aria-live="polite" role="log" className="max-h-[560px] min-h-[250px] space-y-4 overflow-y-auto p-4 sm:p-6">
+          {!messages.length && <p className="py-8 text-center text-muted-foreground">{tx("Hey! What's on your mind? 🐙", "هلا! وش عندك اليوم؟ خلينا نفك الزحمة سوا 🐙")}</p>}
+          {messages.map((message) => <div key={message.id} className={`flex gap-3 ${message.role === "user" ? "justify-end" : ""}`}>
+            <div className={`max-w-[92%] break-words rounded-lg px-4 py-3 text-sm leading-7 whitespace-pre-line ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+              {message.role === "assistant" && <div className="mb-1 flex items-center gap-1 text-xs font-semibold text-primary"><Sparkles className="h-3 w-3" />NEMO</div>}{message.text}
+            </div>
+          </div>)}
+          {busy && <div className="flex items-center gap-2 text-sm text-muted-foreground"><LoaderCircle className="h-4 w-4 animate-spin motion-reduce:animate-none" />{tx("Nemo is thinking…", "نيمو يفكّر…")}</div>}
+          <div ref={end} />
+        </div>
+        {pending.length > 0 && <div className="border-t bg-destructive/5 p-4">
+          <p className="flex items-center gap-2 font-semibold"><Trash2 className="h-4 w-4" />{tx(`Delete ${pending.length} items?`, `أحذف ${pending.length} عناصر؟`)}</p>
+          <ul className="my-3 max-h-36 list-inside list-disc overflow-y-auto break-words text-sm">{pending.map((item) => <li key={`${item.table}:${item.id}`}>{item.title}</li>)}</ul>
+          <div className="flex flex-wrap gap-2"><Button variant="destructive" disabled={busy} onClick={() => void confirm()}><Trash2 />{tx("Confirm deletion", "تأكيد الحذف")}</Button><Button variant="outline" disabled={busy} onClick={cancel}><X />{tx("Cancel", "إلغاء")}</Button></div>
+        </div>}
+        <form onSubmit={(event) => { event.preventDefault(); void send(); }} className="flex gap-2 border-t p-3">
+          <Input aria-label={tx("Message Nemo", "رسالة لنيمو")} value={input} onChange={(event) => setInput(event.target.value)} maxLength={2000} disabled={busy || !ready} placeholder={tx("What's on your mind?", "وش في بالك؟")} className="min-w-0" />
+          <Button type="submit" size="icon" disabled={busy || !ready || !input.trim()} aria-label={tx("Send", "إرسال")}>{busy ? <LoaderCircle className="animate-spin motion-reduce:animate-none" /> : <Send />}</Button>
+        </form>
+      </section>
+      <aside className="space-y-3">
+        <div className="grid gap-2">{suggestions.map((suggestion, i) => <Button key={suggestion} variant="outline" disabled={busy || !ready} onClick={() => void send(suggestion)} className="h-auto min-h-11 justify-start whitespace-normal text-start"><ListTodo className="shrink-0" /><span className="break-words">{suggestion}</span></Button>)}</div>
+        <p className="text-xs leading-6 text-muted-foreground"><Check className="me-1 inline h-3 w-3" />{tx(`${tasks.filter((t) => t.status !== "completed").length} open tasks · ${events.length} events`, `${tasks.filter((t) => t.status !== "completed").length} مهام مفتوحة · ${events.length} فعاليات`)}</p>
+      </aside>
+    </div>
+  </div>;
 }
-function Quick({ icon: Icon, text, onClick }: { icon: typeof ListTodo; text: string; onClick: () => void }) { return <button onClick={onClick} className="flex items-center gap-2 rounded-xl border p-3 text-start transition hover:-translate-y-0.5 hover:bg-muted"><Icon className="h-4 w-4 text-primary" />{text}</button>; }
