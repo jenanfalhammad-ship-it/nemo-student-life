@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { useI18n, type TKey } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
-import { Nemo } from "@/components/nemo";
+import nemoMascot from "@/assets/nemo-goggles-mascot.webp";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
@@ -42,11 +42,11 @@ const GROUPS: { k: TKey; items: Item[] }[] = [
     k: "main",
     items: [
       { to: "/dashboard", k: "myDay", icon: Home },
-      { to: "/calendar", k: "calendar", icon: CalendarDays },
       { to: "/tasks", k: "tasks", icon: ListChecks },
-      { to: "/reminders", k: "reminders", icon: Bell },
-      { to: "/countdown", k: "countdown", icon: Hourglass },
-      { to: "/events", k: "events", icon: Ticket },
+      { to: "/calendar", k: "calendar", icon: CalendarDays },
+      { to: "/focus", k: "focusRoom", icon: Timer },
+      { to: "/ask", k: "askNemo", icon: MessageCircle },
+      { to: "/stats", k: "statistics", icon: BarChart3 },
     ],
   },
   {
@@ -54,13 +54,14 @@ const GROUPS: { k: TKey; items: Item[] }[] = [
     items: [
       { to: "/courses", k: "courses", icon: BookOpen },
       { to: "/flashcards", k: "flashcards", icon: Layers },
-      { to: "/stats", k: "statistics", icon: BarChart3 },
+      { to: "/reminders", k: "reminders", icon: Bell },
+      { to: "/countdown", k: "countdown", icon: Hourglass },
+      { to: "/events", k: "events", icon: Ticket },
     ],
   },
   {
     k: "focusSocial",
     items: [
-      { to: "/focus", k: "focusRoom", icon: Timer },
       { to: "/together", k: "together", icon: Users },
       { to: "/zoo", k: "zoo", icon: PawPrint },
       { to: "/world", k: "world", icon: Sparkles },
@@ -254,7 +255,7 @@ export function AppShell() {
             collapsed && "justify-center px-1",
           )}
         >
-          <Nemo className="h-9 w-9" />
+          <img className="h-11 w-11 object-contain" src={nemoMascot} alt="" />
           {!collapsed && (
             <div className="leading-tight">
               <div className="font-extrabold tracking-wide">NEMO</div>
@@ -285,7 +286,7 @@ export function AppShell() {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="nemo-topbar sticky top-0 z-30 flex h-14 items-center justify-between gap-2 border-b bg-background/85 px-4 backdrop-blur lg:px-8">
           <Link to="/dashboard" className="flex items-center gap-2 lg:hidden">
-            <Nemo className="h-8 w-8" />
+            <img className="h-9 w-9 object-contain" src={nemoMascot} alt="" />
             <span className="font-extrabold">NEMO</span>
           </Link>
           <div className="hidden text-sm text-muted-foreground lg:block">
@@ -336,7 +337,7 @@ export function AppShell() {
           className="flex w-72 flex-col bg-sidebar p-3"
         >
           <SheetTitle className="flex items-center gap-2 px-1">
-            <Nemo className="h-8 w-8" />
+            <img className="h-9 w-9 object-contain" src={nemoMascot} alt="" />
             NEMO
           </SheetTitle>
           <NavLinks onNav={() => setMore(false)} />

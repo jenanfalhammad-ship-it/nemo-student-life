@@ -1,27 +1,32 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
+  ArrowRight,
   ArrowUpRight,
   Bell,
   BookOpen,
   CalendarDays,
   Check,
-  CheckCircle2,
   Circle,
   Clock3,
+  FileText,
+  Heart,
+  Layers,
   ListTodo,
-  PawPrint,
+  MessageCircle,
   Play,
   Sparkles,
+  Star,
   Target,
   Timer,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { expandEvents, useRows, useUpdate } from "@/lib/data";
-import { useTx } from "@/lib/tx";
 import { useProfile } from "@/lib/data";
+import { useTx } from "@/lib/tx";
 import type { Row } from "@/lib/data";
-import { Nemo } from "@/components/nemo";
+import oceanScene from "@/assets/nemo-ocean-scene.webp";
+import nemoMascot from "@/assets/nemo-goggles-mascot.webp";
 import "@/dashboard.css";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -48,6 +53,10 @@ function DashboardPage() {
   });
   const { data: reminders = [] } = useRows("reminders", { order: "remind_at", asc: true });
   const { data: countdowns = [] } = useRows("countdowns", { order: "target_at", asc: true });
+  const { data: sessions = [] } = useRows("focus_sessions", {
+    order: "started_at",
+    asc: false,
+  });
   const updateTask = useUpdate("tasks");
   const updateReminder = useUpdate("reminders");
   const today = new Date();
@@ -68,6 +77,28 @@ function DashboardPage() {
   const nearest = countdowns
     .filter((item) => new Date(item.target_at).getTime() >= Date.now())
     .sort((a, b) => new Date(a.target_at).getTime() - new Date(b.target_at).getTime())[0];
+  const todaySessions = sessions.filter(
+    (session) =>
+      session.ended_at && new Date(session.ended_at).toDateString() === today.toDateString(),
+  );
+  const todayFocusMinutes = todaySessions.reduce(
+    (sum, session) => sum + Math.max(0, session.actual_minutes || 0),
+    0,
+  );
+  const week = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (6 - index));
+    const next = new Date(date);
+    next.setDate(next.getDate() + 1);
+    const minutes = sessions
+      .filter((session) => {
+        if (!session.ended_at) return false;
+        const ended = new Date(session.ended_at);
+        return ended >= date && ended < next;
+      })
+      .reduce((sum, session) => sum + Math.max(0, session.actual_minutes || 0), 0);
+    return { date, minutes };
+  });
+  const peakFocus = Math.max(1, ...week.map((day) => day.minutes));
   const hour = today.getHours();
   const greeting =
     hour < 12
@@ -87,99 +118,154 @@ function DashboardPage() {
   const helloName = profile?.display_name ? `, ${profile.display_name}` : "";
 
   return (
-    <div className="nemo-dashboard space-y-5">
-      <div className="dashboard-heading flex flex-wrap items-end justify-between gap-4">
+    <div className="nemo-dashboard">
+      <header className="dashboard-heading">
         <div>
           <p className="dashboard-kicker">{dayTitle}</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h1>
             {greeting}
             {helloName} <span className="greeting-wave">👋</span>
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="dashboard-subtitle">
             {tx("Let's make today productive!", "خلّينا نخلي يومك مليان إنجاز!")}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="dashboard-tools">
           <span className="dashboard-date">
-            <CalendarDays className="h-4 w-4" />
+            <CalendarDays />
             {today.toLocaleDateString(locale, { month: "short", day: "numeric", year: "numeric" })}
           </span>
-          <Button
-            asChild
-            variant="outline"
-            size="icon"
-            className="dashboard-icon-button"
+          <Link
+            to="/reminders"
+            className="dashboard-bell"
             aria-label={tx("Reminders", "التذكيرات")}
           >
-            <Link to="/reminders">
-              <Bell className="h-4 w-4" />
-              {todayReminders.length > 0 && <span className="notification-dot" />}
-            </Link>
-          </Button>
-        </div>
-      </div>
-
-      <section className="ocean-hero">
-        <div className="hero-copy">
-          <span className="hero-chip">
-            <Sparkles className="h-3.5 w-3.5" />
-            {tx("YOUR STUDY SPACE", "مساحتك الدراسية")}
-          </span>
-          <h2>
-            {tx(
-              "One calm session can change your whole day.",
-              "جلسة هادئة واحدة ممكن تغيّر يومك كله.",
-            )}
-          </h2>
-          <p>
-            {tx(
-              "Pick a task, take a breath, and let Nemo keep you on track.",
-              "اختر مهمة، خذ نفسًا، ودع نيمو يساعدك على الاستمرار.",
-            )}
-          </p>
-          <Link to="/focus" className="hero-start">
-            <span>
-              <Play className="h-4 w-4 fill-current" />
-            </span>
-            {tx("Start a focus session", "ابدأ جلسة تركيز")}
-            <ArrowUpRight className="h-4 w-4" />
+            <Bell />
+            {todayReminders.length > 0 && <span className="notification-dot" />}
+          </Link>
+          <Link
+            to="/profile"
+            className="dashboard-avatar"
+            aria-label={tx("Profile", "الملف الشخصي")}
+          >
+            <img src={nemoMascot} alt="Nemo" />
           </Link>
         </div>
-        <div className="hero-art" aria-hidden="true">
-          <div className="hero-orb hero-orb-one" />
-          <div className="hero-orb hero-orb-two" />
-          <div className="hero-bubble bubble-one" />
-          <div className="hero-bubble bubble-two" />
-          <div className="hero-bubble bubble-three" />
-          <div className="hero-glow" />
-          <Nemo mood="studying" float className="hero-nemo" />
-          <div className="hero-books">
-            <span />
-            <span />
-            <span />
+      </header>
+
+      <section className="dashboard-stage">
+        <Link to="/focus" className="focus-card">
+          <div className="focus-card-top">
+            <span>
+              <Target /> {tx("Focus session", "جلسة تركيز")}
+            </span>
+            <ArrowRight />
           </div>
+          <div className="focus-time">25:00</div>
+          <div className="focus-card-bottom">
+            <span className="focus-play">
+              <Play fill="currentColor" />
+            </span>
+            <span>{tx("Start a focus session", "ابدأ جلسة تركيز")}</span>
+            <span className="focus-equalizer">
+              <i />
+              <i />
+              <i />
+              <i />
+            </span>
+          </div>
+          <span className="focus-coral coral-a" />
+          <span className="focus-coral coral-b" />
+        </Link>
+
+        <div
+          className="reef-scene"
+          style={{ backgroundImage: `url(${oceanScene})` }}
+          role="img"
+          aria-label={tx(
+            "Nemo studying in a glowing underwater reef",
+            "نيمو يذاكر في أعماق بحر مضيئة",
+          )}
+        >
+          <div className="reef-bubbles">
+            <i />
+            <i />
+            <i />
+            <i />
+            <i />
+            <i />
+          </div>
+          <span className="reef-caption">
+            <Sparkles />
+            {tx("A little focus goes a long way", "قليل من التركيز يصنع الكثير")}
+          </span>
         </div>
-        <div className="hero-counter">
-          <Timer className="h-4 w-4" />
-          <span>50:00</span>
-          <small>{tx("focus timer", "مؤقت التركيز")}</small>
-        </div>
+
+        <section className="dash-panel status-panel">
+          <div className="panel-heading">
+            <h2>{tx("Your status", "حالتك")}</h2>
+            <span
+              className="status-info"
+              title={tx("Based on your saved activity", "استنادًا إلى نشاطك المحفوظ")}
+            >
+              i
+            </span>
+          </div>
+          <div className="status-main">
+            <div
+              className="productivity-ring"
+              style={{ "--progress": `${completion}%` } as React.CSSProperties}
+            >
+              <div>
+                <strong>{completion}%</strong>
+                <span>{tx("Productivity", "الإنجاز")}</span>
+              </div>
+            </div>
+            <div className="status-bars">
+              <StatusRow
+                icon={<Target />}
+                label={tx("Tasks", "المهام")}
+                value={`${completedToday.length}/${todaysTasks.length}`}
+                percent={completion}
+                tone="violet"
+              />
+              <StatusRow
+                icon={<Timer />}
+                label={tx("Focus", "التركيز")}
+                value={`${todayFocusMinutes} ${tx("min", "د")}`}
+                percent={Math.round((todayFocusMinutes / peakFocus) * 100)}
+                tone="cyan"
+              />
+              <StatusRow
+                icon={<Bell />}
+                label={tx("Reminders", "التذكيرات")}
+                value={`${todayReminders.length}`}
+                percent={
+                  activeReminders.length
+                    ? Math.round((todayReminders.length / activeReminders.length) * 100)
+                    : 0
+                }
+                tone="pink"
+              />
+            </div>
+          </div>
+        </section>
       </section>
 
-      <div className="dashboard-grid">
+      <div className="dashboard-content-grid">
         <section className="dash-panel tasks-panel">
           <div className="panel-heading">
             <div>
               <h2>{tx("Today's tasks", "مهام اليوم")}</h2>
               <p>
-                {completedToday.length} {tx("completed", "مكتملة")} · {openTasks.length}{" "}
-                {tx("in progress", "قيد العمل")}
+                {completedToday.length} {tx("of", "من")} {todaysTasks.length}{" "}
+                {tx("completed", "مكتملة")}
               </p>
             </div>
             <Button asChild size="sm" className="add-task-button">
               <Link to="/tasks">
                 <span>+</span>
-                {tx("All tasks", "كل المهام")}
+                {tx("Add task", "إضافة مهمة")}
               </Link>
             </Button>
           </div>
@@ -216,137 +302,217 @@ function DashboardPage() {
           )}
           <div className="panel-footer">
             <Link to="/calendar">
-              <CalendarDays className="h-4 w-4" />
+              <CalendarDays />
               {tx("Today's schedule", "جدول اليوم")}
-              <span className="footer-count">{todaysEvents.length}</span>
-              <ArrowUpRight className="ms-auto h-4 w-4" />
+              <span className="footer-count">{eventsLoading ? "…" : todaysEvents.length}</span>
+              <ArrowUpRight className="footer-arrow" />
             </Link>
           </div>
         </section>
 
-        <section className="dash-panel status-panel">
+        <section className="dash-panel assistant-panel">
           <div className="panel-heading">
-            <div>
-              <h2>{tx("Your day", "يومك")}</h2>
-              <p>{tx("A little progress goes a long way.", "كل إنجاز صغير يصنع فرقًا.")}</p>
-            </div>
-            <Target className="panel-heading-icon" />
+            <h2>
+              <Sparkles />
+              {tx("Nemo AI", "مساعد نيمو")}
+            </h2>
+            <Link
+              to="/ask"
+              className="assistant-chat-icon"
+              aria-label={tx("Open Nemo AI", "افتح مساعد نيمو")}
+            >
+              <MessageCircle />
+            </Link>
           </div>
-          <div
-            className="productivity-ring"
-            style={{ "--progress": `${completion}%` } as React.CSSProperties}
-          >
-            <div>
-              <strong>{completion}%</strong>
-              <span>{tx("done today", "إنجاز اليوم")}</span>
-            </div>
-          </div>
-          <div className="status-bars">
-            <StatusRow
-              icon={<CheckCircle2 />}
-              label={tx("Tasks", "المهام")}
-              value={todaysTasks.length ? `${completedToday.length}/${todaysTasks.length}` : "0"}
-              percent={completion}
-              tone="violet"
+          <img className="assistant-mascot" src={nemoMascot} alt="Nemo" />
+          <p className="assistant-prompt">
+            {tx("How can I help you today?", "كيف أقدر أساعدك اليوم؟")}
+          </p>
+          <div className="assistant-actions">
+            <AssistantLink
+              to="/calendar"
+              icon={<Zap />}
+              text={tx("Optimize my schedule", "نظّم جدولي")}
             />
-            <StatusRow
-              icon={<CalendarDays />}
-              label={tx("Events", "الفعاليات")}
-              value={todaysEvents.length.toLocaleString(locale)}
-              percent={Math.min(todaysEvents.length * 22, 100)}
-              tone="cyan"
+            <AssistantLink
+              to="/tasks"
+              icon={<FileText />}
+              text={tx("Break down a task", "قسّم مهمة كبيرة")}
             />
-            <StatusRow
-              icon={<Bell />}
-              label={tx("Reminders", "التذكيرات")}
-              value={todayReminders.length.toLocaleString(locale)}
-              percent={Math.min(todayReminders.length * 24, 100)}
-              tone="pink"
+            <AssistantLink
+              to="/ask"
+              icon={<BookOpen />}
+              text={tx("Generate a study plan", "أنشئ خطة مذاكرة")}
+            />
+            <AssistantLink
+              to="/stats"
+              icon={<Sparkles />}
+              text={tx("Track my progress", "تابع تقدمي")}
             />
           </div>
         </section>
 
-        <section className="dash-panel reminders-panel">
-          <div className="panel-heading">
-            <div>
-              <h2>{tx("Up next", "التالي")}</h2>
-              <p>{tx("Your next reminders", "تذكيراتك القادمة")}</p>
+        <div className="dashboard-right-column">
+          <section className="dash-panel reminders-panel">
+            <div className="panel-heading">
+              <h2>
+                <Bell />
+                {tx("Reminders", "التذكيرات")}
+              </h2>
+              <Link className="panel-link" to="/reminders">
+                <ArrowUpRight />
+              </Link>
             </div>
-            <Link className="panel-link" to="/reminders">
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </div>
-          {todayReminders.length === 0 ? (
-            <div className="compact-empty">
-              <Bell />
-              <span>{tx("No active reminders for today.", "ما عندك تذكيرات نشطة اليوم.")}</span>
-            </div>
-          ) : (
-            <div className="dash-list">
-              {todayReminders.slice(0, 3).map((item) => (
-                <div key={item.id} className="reminder-row">
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="task-check"
-                    aria-label={tx("Complete reminder", "إكمال التذكير")}
-                    onClick={() => updateReminder.mutate({ id: item.id, values: { done: true } })}
-                  >
-                    <Circle />
-                  </Button>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate">{item.title}</p>
-                    <small>{fmtTime(item.remind_at)}</small>
+            {todayReminders.length === 0 ? (
+              <div className="compact-empty">
+                {tx("No reminders for today yet.", "لا توجد تذكيرات لليوم.")}
+              </div>
+            ) : (
+              <div className="dash-list">
+                {todayReminders.slice(0, 3).map((item) => (
+                  <div key={item.id} className="reminder-row">
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="task-check"
+                      aria-label={tx("Complete reminder", "إكمال التذكير")}
+                      onClick={() => updateReminder.mutate({ id: item.id, values: { done: true } })}
+                    >
+                      <Circle />
+                    </Button>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate">{item.title}</p>
+                      <small>{fmtTime(item.remind_at)}</small>
+                    </div>
+                    <Zap className="reminder-zap" />
                   </div>
-                  <Zap className="h-4 w-4 text-amber-300" />
-                </div>
+                ))}
+              </div>
+            )}
+            {nearest && (
+              <Link to="/countdown" className="milestone-link">
+                <Clock3 />
+                <span>
+                  <small>{tx("NEXT MILESTONE", "الموعد القادم")}</small>
+                  <strong>{nearest.title}</strong>
+                  <small>{fmtDate(nearest.target_at, { month: "short", day: "numeric" })}</small>
+                </span>
+                <ArrowUpRight className="milestone-arrow" />
+              </Link>
+            )}
+          </section>
+
+          <section className="dash-panel weekly-panel">
+            <div className="panel-heading">
+              <h2>
+                <span className="mini-bars">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                {tx("Weekly focus", "تركيز الأسبوع")}
+              </h2>
+              <Link className="weekly-percent" to="/stats">
+                {tx("View all", "عرض الكل")}
+                <ArrowUpRight />
+              </Link>
+            </div>
+            <div
+              className="weekly-chart"
+              aria-label={tx(
+                "Weekly minutes from your recorded focus sessions",
+                "دقائق الأسبوع من جلسات التركيز المسجلة",
+              )}
+            >
+              <div className="chart-guides">
+                <i />
+                <i />
+                <i />
+              </div>
+              <svg viewBox="0 0 300 94" role="img" aria-hidden="true">
+                <defs>
+                  <linearGradient id="focusArea" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#a489ff" stopOpacity=".36" />
+                    <stop offset="100%" stopColor="#8a71ef" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <polygon
+                  points={
+                    week
+                      .map((day, i) => `${i * 48 + 6},${86 - (day.minutes / peakFocus) * 70}`)
+                      .join(" ") + " 294,94 6,94"
+                  }
+                  fill="url(#focusArea)"
+                />
+                <polyline
+                  points={week
+                    .map((day, i) => `${i * 48 + 6},${86 - (day.minutes / peakFocus) * 70}`)
+                    .join(" ")}
+                  fill="none"
+                  stroke="#b8a0ff"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {week.map((day, i) => (
+                  <circle
+                    key={day.date.toISOString()}
+                    cx={i * 48 + 6}
+                    cy={86 - (day.minutes / peakFocus) * 70}
+                    r="3.5"
+                    fill="#f4ebff"
+                    stroke="#a992ff"
+                    strokeWidth="2"
+                  />
+                ))}
+              </svg>
+            </div>
+            <div className="week-labels">
+              {week.map((day) => (
+                <span
+                  key={day.date.toISOString()}
+                  title={`${day.minutes} ${tx("minutes", "دقيقة")}`}
+                >
+                  {day.date.toLocaleDateString(locale, { weekday: "short" })}
+                </span>
               ))}
             </div>
-          )}
-          {nearest && (
-            <Link to="/countdown" className="milestone-link">
-              <Clock3 />
-              <span>
-                <small>{tx("NEXT MILESTONE", "الموعد القادم")}</small>
-                <strong>{nearest.title}</strong>
-                <small>{fmtDate(nearest.target_at, { month: "short", day: "numeric" })}</small>
-              </span>
-              <ArrowUpRight className="ms-auto h-4 w-4" />
-            </Link>
-          )}
-        </section>
+          </section>
+        </div>
       </div>
 
-      <div className="quick-links-grid">
+      <nav className="dashboard-shortcuts" aria-label={tx("Quick links", "روابط سريعة")}>
         <QuickLink
           to="/courses"
           icon={<BookOpen />}
           title={tx("My courses", "موادي")}
           detail={tx("Course workspaces", "مساحات المواد")}
-          tone="violet"
         />
         <QuickLink
           to="/calendar"
           icon={<CalendarDays />}
           title={tx("Calendar", "التقويم")}
           detail={tx("Lectures & deadlines", "محاضرات ومواعيد")}
-          tone="cyan"
         />
         <QuickLink
-          to="/zoo"
-          icon={<PawPrint />}
-          title={tx("My zoo", "حديقتي")}
-          detail={tx("Meet your companions", "تعرّف على رفاقك")}
-          tone="coral"
+          to="/flashcards"
+          icon={<Layers />}
+          title={tx("Flashcards", "البطاقات التعليمية")}
+          detail={tx("Review and study", "مراجعة ومذاكرة")}
         />
         <QuickLink
           to="/stats"
           icon={<Sparkles />}
           title={tx("Statistics", "الإحصائيات")}
-          detail={tx("See your progress", "تابع تقدمك")}
-          tone="pink"
+          detail={tx("See your real progress", "تابع إنجازاتك")}
         />
-      </div>
+        <QuickLink
+          to="/zoo"
+          icon={<Heart />}
+          title={tx("My zoo", "حديقتي")}
+          detail={tx("Meet your companions", "رفاقك البحريون")}
+        />
+      </nav>
     </div>
   );
 }
@@ -378,27 +544,42 @@ function StatusRow({
     </div>
   );
 }
+function AssistantLink({
+  to,
+  icon,
+  text,
+}: {
+  to: "/calendar" | "/tasks" | "/ask" | "/stats";
+  icon: React.ReactNode;
+  text: string;
+}) {
+  return (
+    <Link to={to} className="assistant-action">
+      <span>{icon}</span>
+      <strong>{text}</strong>
+      <ArrowRight />
+    </Link>
+  );
+}
 function QuickLink({
   to,
   icon,
   title,
   detail,
-  tone,
 }: {
-  to: "/courses" | "/calendar" | "/zoo" | "/stats";
+  to: "/courses" | "/calendar" | "/flashcards" | "/stats" | "/zoo";
   icon: React.ReactNode;
   title: string;
   detail: string;
-  tone: string;
 }) {
   return (
     <Link to={to} className="quick-link">
-      <span className={`quick-link-icon ${tone}`}>{icon}</span>
+      <span className="quick-link-icon">{icon}</span>
       <span>
         <strong>{title}</strong>
         <small>{detail}</small>
       </span>
-      <ArrowUpRight className="ms-auto h-4 w-4 quick-arrow" />
+      <ArrowUpRight className="quick-arrow" />
     </Link>
   );
 }
@@ -444,11 +625,9 @@ function DayTask({
             : ""}
         </small>
       </div>
-      <span
+      <Star
         className={`priority-mark ${task.priority === "urgent" || task.priority === "high" ? "priority-high" : ""}`}
-      >
-        <Sparkles />
-      </span>
+      />
     </div>
   );
 }
