@@ -7,6 +7,7 @@ import {
   Circle,
   Clock3,
   ListTodo,
+  PawPrint,
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -109,21 +110,25 @@ function DashboardPage() {
           title={tx("Tasks due today", "مهام مستحقة اليوم")}
           value={`${pendingToday.length}/${todaysTasks.length}`}
           icon={<ListTodo />}
+          tone="bg-peach text-orange-700 dark:text-orange-200"
         />
         <Summary
           title={tx("Events today", "فعاليات اليوم")}
           value={todaysEvents.length}
           icon={<CalendarDays />}
+          tone="bg-sky text-sky-ink"
         />
         <Summary
           title={tx("Reminders today", "تذكيرات اليوم")}
           value={todayReminders.length}
           icon={<Bell />}
+          tone="bg-lavender text-violet-700 dark:text-violet-200"
         />
         <Summary
           title={tx("Day progress", "إنجاز اليوم")}
           value={`${completion}%`}
           icon={<CheckCircle2 />}
+          tone="bg-sage-soft text-primary-deep"
         />
       </div>
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(300px,0.82fr)]">
@@ -241,6 +246,26 @@ function DashboardPage() {
           </CardContent>
         </Card>
         <div className="space-y-5">
+          <Link
+            to="/zoo"
+            className="group block overflow-hidden rounded-2xl border bg-gradient-to-br from-sage-soft/80 via-card to-lavender/60 p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-lift"
+          >
+            <div className="flex items-center gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/80 text-emerald-700 shadow-sm dark:bg-emerald-950/50 dark:text-emerald-200">
+                <PawPrint className="h-5 w-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-bold">{tx("Your living zoo", "حديقتك الحيّة")}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  {tx(
+                    "Finish tasks, open gates, meet new companions.",
+                    "أنجز مهامك وافتح البوابات وتعرّف على رفاق جدد.",
+                  )}
+                </p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </div>
+          </Link>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="flex items-center gap-2">
@@ -339,10 +364,12 @@ function Summary({
   title,
   value,
   icon,
+  tone = "bg-primary/10 text-primary",
 }: {
   title: string;
   value: string | number;
   icon: React.ReactNode;
+  tone?: string;
 }) {
   return (
     <Card>
@@ -351,7 +378,7 @@ function Summary({
           <p className="text-sm text-muted-foreground">{title}</p>
           <p className="mt-1 text-2xl font-bold">{value}</p>
         </div>
-        <span className="rounded-lg bg-primary/10 p-2 text-primary">{icon}</span>
+        <span className={`rounded-xl p-2.5 ${tone}`}>{icon}</span>
       </CardContent>
     </Card>
   );
