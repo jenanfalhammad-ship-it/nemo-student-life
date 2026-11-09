@@ -4,7 +4,7 @@ export type Theme = "light" | "dark" | "system";
 const Ctx = createContext<{ theme: Theme; setTheme: (t: Theme) => void } | null>(null);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>("dark");
   useEffect(() => {
     const s = localStorage.getItem("nemo-theme") as Theme | null;
     if (s) setThemeState(s);
@@ -19,7 +19,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);
   }, [theme]);
-  const setTheme = (t: Theme) => { localStorage.setItem("nemo-theme", t); setThemeState(t); };
+  const setTheme = (t: Theme) => {
+    localStorage.setItem("nemo-theme", t);
+    setThemeState(t);
+  };
   return <Ctx.Provider value={{ theme, setTheme }}>{children}</Ctx.Provider>;
 }
 

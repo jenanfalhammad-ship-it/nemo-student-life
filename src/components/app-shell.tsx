@@ -241,16 +241,16 @@ export function AppShell() {
   if (loc.pathname === "/onboarding") return <Outlet />;
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="nemo-app-shell flex min-h-screen bg-background">
       <aside
         className={cn(
-          "sticky top-0 hidden h-screen shrink-0 flex-col gap-4 border-e bg-sidebar p-3 lg:flex",
+          "nemo-sidebar sticky top-0 hidden h-screen shrink-0 flex-col gap-4 border-e bg-sidebar p-3 lg:flex",
           collapsed ? "w-[68px]" : "w-60",
         )}
       >
         <div
           className={cn(
-            "flex items-center gap-2 rounded-2xl bg-gradient-to-br from-sage-soft/80 via-card to-lavender/50 px-2 py-2",
+            "nemo-brand flex items-center gap-2 rounded-2xl bg-gradient-to-br from-sage-soft/80 via-card to-lavender/50 px-2 py-2",
             collapsed && "justify-center px-1",
           )}
         >
@@ -283,7 +283,7 @@ export function AppShell() {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-2 border-b bg-background/85 px-4 backdrop-blur lg:px-8">
+        <header className="nemo-topbar sticky top-0 z-30 flex h-14 items-center justify-between gap-2 border-b bg-background/85 px-4 backdrop-blur lg:px-8">
           <Link to="/dashboard" className="flex items-center gap-2 lg:hidden">
             <Nemo className="h-8 w-8" />
             <span className="font-extrabold">NEMO</span>
