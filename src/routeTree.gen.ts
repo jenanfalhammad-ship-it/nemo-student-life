@@ -27,6 +27,7 @@ import { Route as AuthenticatedRemindersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedStatsRouteImport } from './routes/_authenticated/stats'
 import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks'
+import { Route as AuthenticatedTodoListRouteImport } from './routes/_authenticated/todo-list'
 import { Route as AuthenticatedTogetherRouteImport } from './routes/_authenticated/together'
 import { Route as AuthenticatedWorldRouteImport } from './routes/_authenticated/world'
 import { Route as AuthenticatedZooRouteImport } from './routes/_authenticated/zoo'
@@ -120,6 +121,11 @@ const AuthenticatedTasksRoute = AuthenticatedTasksRouteImport.update({
   path: '/tasks',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedTodoListRoute = AuthenticatedTodoListRouteImport.update({
+  id: '/todo-list',
+  path: '/todo-list',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTogetherRoute = AuthenticatedTogetherRouteImport.update({
   id: '/together',
   path: '/together',
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/stats': typeof AuthenticatedStatsRoute
   '/tasks': typeof AuthenticatedTasksRoute
+  '/todo-list': typeof AuthenticatedTodoListRoute
   '/together': typeof AuthenticatedTogetherRoute
   '/world': typeof AuthenticatedWorldRoute
   '/zoo': typeof AuthenticatedZooRoute
@@ -176,6 +183,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/stats': typeof AuthenticatedStatsRoute
   '/tasks': typeof AuthenticatedTasksRoute
+  '/todo-list': typeof AuthenticatedTodoListRoute
   '/together': typeof AuthenticatedTogetherRoute
   '/world': typeof AuthenticatedWorldRoute
   '/zoo': typeof AuthenticatedZooRoute
@@ -200,6 +208,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/stats': typeof AuthenticatedStatsRoute
   '/_authenticated/tasks': typeof AuthenticatedTasksRoute
+  '/_authenticated/todo-list': typeof AuthenticatedTodoListRoute
   '/_authenticated/together': typeof AuthenticatedTogetherRoute
   '/_authenticated/world': typeof AuthenticatedWorldRoute
   '/_authenticated/zoo': typeof AuthenticatedZooRoute
@@ -224,6 +233,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/stats'
     | '/tasks'
+    | '/todo-list'
     | '/together'
     | '/world'
     | '/zoo'
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/stats'
     | '/tasks'
+    | '/todo-list'
     | '/together'
     | '/world'
     | '/zoo'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/stats'
     | '/_authenticated/tasks'
+    | '/_authenticated/todo-list'
     | '/_authenticated/together'
     | '/_authenticated/world'
     | '/_authenticated/zoo'
@@ -409,6 +421,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTasksRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/todo-list': {
+      id: '/_authenticated/todo-list'
+      path: '/todo-list'
+      fullPath: '/todo-list'
+      preLoaderRoute: typeof AuthenticatedTodoListRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/together': {
       id: '/_authenticated/together'
       path: '/together'
@@ -448,6 +467,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedStatsRoute: typeof AuthenticatedStatsRoute
   AuthenticatedTasksRoute: typeof AuthenticatedTasksRoute
+  AuthenticatedTodoListRoute: typeof AuthenticatedTodoListRoute
   AuthenticatedTogetherRoute: typeof AuthenticatedTogetherRoute
   AuthenticatedWorldRoute: typeof AuthenticatedWorldRoute
   AuthenticatedZooRoute: typeof AuthenticatedZooRoute
@@ -468,6 +488,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedStatsRoute: AuthenticatedStatsRoute,
   AuthenticatedTasksRoute: AuthenticatedTasksRoute,
+  AuthenticatedTodoListRoute: AuthenticatedTodoListRoute,
   AuthenticatedTogetherRoute: AuthenticatedTogetherRoute,
   AuthenticatedWorldRoute: AuthenticatedWorldRoute,
   AuthenticatedZooRoute: AuthenticatedZooRoute,

@@ -7,7 +7,7 @@ const en = {
   // nav
   main: "Main", academic: "Academic", focusSocial: "Focus & Social",
   myDay: "My Day", calendar: "Calendar", tasks: "Tasks", reminders: "Reminders", countdown: "Countdown", events: "Events",
-  courses: "My Courses", flashcards: "Flashcards & Study Studio", statistics: "Statistics",
+  courses: "My Courses", flashcards: "Flashcards & Study Studio", todoList: "To Do List", statistics: "Statistics",
   focusRoom: "Focus Room", together: "Study Together", zoo: "My Zoo", world: "Nemo's World",
   askNemo: "Ask Nemo", settings: "Settings", profile: "Profile",
   home: "Home", focus: "Focus", nemo: "Nemo", more: "More", collapse: "Collapse",
@@ -92,7 +92,7 @@ const ar: Dict = {
   brand: "نيمو", tagline: "حياتك الجامعية، تحت السيطرة.",
   main: "الرئيسية", academic: "الأكاديمي", focusSocial: "التركيز والمجتمع",
   myDay: "يومي", calendar: "التقويم", tasks: "المهام", reminders: "التذكيرات", countdown: "العد التنازلي", events: "الفعاليات",
-  courses: "موادي", flashcards: "البطاقات واستوديو المذاكرة", statistics: "الإحصائيات",
+  courses: "موادي", flashcards: "البطاقات واستوديو المذاكرة", todoList: "قائمة المهام", statistics: "الإحصائيات",
   focusRoom: "غرفة التركيز", together: "ذاكر مع أصدقائك", zoo: "حديقتي", world: "عالم نيمو",
   askNemo: "اسأل نيمو", settings: "الإعدادات", profile: "الملف الشخصي",
   home: "الرئيسية", focus: "تركيز", nemo: "نيمو", more: "المزيد", collapse: "طي",

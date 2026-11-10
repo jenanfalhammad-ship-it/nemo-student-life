@@ -13,6 +13,7 @@ import {
   Hourglass,
   Ticket,
   BookOpen,
+  NotebookPen,
   Layers,
   BarChart3,
   Timer,
@@ -55,6 +56,7 @@ const GROUPS: { k: TKey; items: Item[] }[] = [
     items: [
       { to: "/courses", k: "courses", icon: BookOpen },
       { to: "/flashcards", k: "flashcards", icon: Layers },
+      { to: "/todo-list", k: "todoList", icon: NotebookPen },
       { to: "/reminders", k: "reminders", icon: Bell },
       { to: "/countdown", k: "countdown", icon: Hourglass },
       { to: "/events", k: "events", icon: Ticket },
@@ -90,6 +92,7 @@ const ICON_TONES: Record<string, string> = {
   "/events": "bg-cyan-100 text-cyan-700 dark:bg-cyan-950/50 dark:text-cyan-200",
   "/courses": "bg-sky text-sky-ink",
   "/flashcards": "bg-lavender text-violet-700 dark:text-violet-200",
+  "/todo-list": "bg-sky text-sky-ink",
   "/stats": "bg-peach text-orange-700 dark:text-orange-200",
   "/focus": "bg-primary/10 text-primary-deep",
   "/together": "bg-pink-100 text-pink-700 dark:bg-pink-950/50 dark:text-pink-200",
