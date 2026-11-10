@@ -25,6 +25,7 @@ import {
 import { fromLocalInput, toLocalInput, useInsert, useRemove, useRows, useUpdate } from "@/lib/data";
 import { useTx } from "@/lib/tx";
 import type { Row } from "@/lib/data";
+import "@/page-themes/reminders.css";
 
 export const Route = createFileRoute("/_authenticated/reminders")({
   head: () => ({
@@ -125,7 +126,7 @@ function RemindersPage() {
     ["all", tx("All", "الكل")],
   ] as const;
   return (
-    <div className="space-y-6">
+    <div className="nemo-sea-page nemo-sea-page--reminders space-y-6">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <p className="text-sm font-medium text-primary">

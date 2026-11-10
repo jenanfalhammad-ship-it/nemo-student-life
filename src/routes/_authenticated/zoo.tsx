@@ -23,6 +23,8 @@ import { useTx } from "@/lib/tx";
 import { habitatProgress } from "@/lib/zoo-progression";
 import zooMap from "@/assets/personal-zoo-map.jpg";
 
+import "@/page-themes/zoo.css";
+
 export const Route = createFileRoute("/_authenticated/zoo")({
   head: () => ({
     meta: [
@@ -167,7 +169,7 @@ function ZooPage() {
     .find((gate) => !gate.unlocked);
 
   return (
-    <div dir={dir} className="mx-auto w-full max-w-7xl pb-10">
+    <div dir={dir} className="nemo-sea-page nemo-sea-page--zoo mx-auto w-full max-w-7xl pb-10">
       <PageHeader
         title={tx("My Zoo", "حديقتي")}
         sub={tx(

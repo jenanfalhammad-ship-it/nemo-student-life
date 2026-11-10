@@ -14,6 +14,7 @@ import { GUEST_ID } from "@/integrations/supabase/guest-client";
 import { askLocalNemo, askNemo, confirmNemoDeletes } from "@/lib/nemo-ai.functions";
 import { actionValues, nemoTables, workspaceSchema, type PendingDelete } from "@/lib/nemo-actions";
 import { executeLocalNemoActions, removeLocalNemoItems } from "@/lib/nemo-local";
+import "@/page-themes/ask.css";
 
 type Message = { id: string; role: "assistant" | "user"; text: string };
 export const Route = createFileRoute("/_authenticated/ask")({
@@ -191,9 +192,9 @@ function AskNemo() {
     tx("Help me plan my week", "ساعدني أخطط أسبوعي"),
   ];
   return (
-    <div dir={dir} className="mx-auto w-full max-w-5xl pb-10">
+    <div dir={dir} className="nemo-sea-page nemo-sea-page--ask mx-auto w-full max-w-5xl pb-10">
       <PageHeader title={tx("Ask Nemo", "اسأل نيمو")} />
-      <section className="mb-6 flex items-center gap-4 overflow-hidden rounded-3xl border bg-gradient-to-br from-rose-50 via-card to-lavender/60 p-4 shadow-soft dark:from-rose-950/20 sm:p-5">
+      <section className="ask-intro mb-6 flex items-center gap-4 overflow-hidden rounded-3xl border p-4 shadow-soft sm:p-5">
         <Nemo mood="happy" float className="h-20 w-20 shrink-0" />
         <div className="min-w-0">
           <p className="text-xl font-bold">
@@ -212,12 +213,12 @@ function AskNemo() {
           )}
         </div>
       </section>
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]">
-        <section className="min-w-0 overflow-hidden rounded-3xl border bg-card shadow-soft">
+      <div className="ask-layout grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]">
+        <section className="ask-chat min-w-0 overflow-hidden rounded-3xl border shadow-soft">
           <div
             aria-live="polite"
             role="log"
-            className="max-h-[560px] min-h-[300px] space-y-4 overflow-y-auto bg-gradient-to-b from-sage-soft/25 via-background to-lavender/25 p-4 sm:p-6"
+            className="ask-transcript max-h-[560px] min-h-[300px] space-y-4 overflow-y-auto p-4 sm:p-6"
           >
             {!messages.length && (
               <p className="py-8 text-center text-muted-foreground">
@@ -308,7 +309,7 @@ function AskNemo() {
             </Button>
           </form>
         </section>
-        <aside className="space-y-3">
+        <aside className="ask-prompts space-y-3">
           <div className="rounded-2xl border bg-gradient-to-br from-lavender/45 via-card to-sky/50 p-3">
             <p className="mb-2 flex items-center gap-2 px-1 text-xs font-bold text-muted-foreground">
               <Sparkles className="h-3.5 w-3.5 text-violet-600" />

@@ -25,6 +25,7 @@ import {
 import { fromLocalInput, toLocalInput, useInsert, useRemove, useRows, useUpdate } from "@/lib/data";
 import { useTx } from "@/lib/tx";
 import type { Row } from "@/lib/data";
+import "@/page-themes/events.css";
 
 export const Route = createFileRoute("/_authenticated/events")({
   head: () => ({
@@ -153,18 +154,20 @@ function EventsPage() {
     setDraft(freshDraft());
   };
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+    <div className="nemo-sea-page nemo-sea-page--events events-layout space-y-6">
+      <div className="events-heading flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <p className="text-sm font-medium text-primary">
+          <p className="events-eyebrow text-sm font-medium text-primary">
             {tx("Every lecture, appointment, and occasion", "محاضراتك ومواعيدك ومناسباتك")}
           </p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight">{tx("Events", "الفعاليات")}</h1>
-          <p className="mt-2 text-muted-foreground">
+          <h1 className="events-title mt-1 text-3xl font-bold tracking-tight">
+            {tx("Events", "الفعاليات")}
+          </h1>
+          <p className="events-subtitle mt-2 text-muted-foreground">
             {tx("One place for the dates you have saved.", "مكان واحد لكل المواعيد التي حفظتها.")}
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="events-actions flex flex-wrap gap-2">
           <Button asChild variant="outline">
             <Link to="/calendar">
               <CalendarDays />
@@ -177,7 +180,7 @@ function EventsPage() {
           </Button>
         </div>
       </div>
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="events-summary grid gap-3 sm:grid-cols-3">
         <Summary
           title={tx("Upcoming", "قادمة")}
           value={
@@ -197,7 +200,7 @@ function EventsPage() {
         />
       </div>
       {showForm && (
-        <Card className="border-primary/30">
+        <Card className="events-form-card border-primary/30">
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-lg">
               {editing ? tx("Edit event", "تعديل الفعالية") : tx("Create an event", "إنشاء فعالية")}
@@ -309,8 +312,8 @@ function EventsPage() {
           </CardContent>
         </Card>
       )}
-      <Card>
-        <CardHeader className="gap-4">
+      <Card className="events-list-card">
+        <CardHeader className="events-list-header gap-4">
           <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <CardTitle>
               {tx("Saved events & appointments", "الفعاليات والمواعيد المحفوظة")}
@@ -400,9 +403,9 @@ function EventsPage() {
               return (
                 <div
                   key={event.id}
-                  className="flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-start"
+                  className="events-row flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-start"
                 >
-                  <div className="flex w-full shrink-0 items-center gap-3 rounded-lg bg-primary/5 p-3 sm:w-28 sm:flex-col sm:items-start">
+                  <div className="events-date flex w-full shrink-0 items-center gap-3 rounded-lg bg-primary/5 p-3 sm:w-28 sm:flex-col sm:items-start">
                     <span className="text-xs font-semibold uppercase text-primary">
                       {fmtDate(start, { month: "short" })}
                     </span>
@@ -411,7 +414,7 @@ function EventsPage() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="font-semibold">{event.title}</h3>
+                      <h3 className="events-name font-semibold">{event.title}</h3>
                       <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
                         {kindLabel(event.kind, tx)}
                       </span>
@@ -451,7 +454,7 @@ function EventsPage() {
                       </a>
                     )}
                   </div>
-                  <div className="flex self-end sm:self-start">
+                  <div className="events-row-actions flex self-end sm:self-start">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -484,13 +487,15 @@ function EventsPage() {
 }
 function Summary({ title, value, icon }: { title: string; value: number; icon: React.ReactNode }) {
   return (
-    <Card>
+    <Card className="events-summary-card">
       <CardContent className="flex items-center justify-between p-4">
         <div>
-          <p className="text-sm text-muted-foreground">{title}</p>
+          <p className="events-summary-label text-sm text-muted-foreground">{title}</p>
           <p className="mt-1 text-2xl font-bold">{value}</p>
         </div>
-        <span className="rounded-lg bg-primary/10 p-2 text-primary">{icon}</span>
+        <span className="events-summary-icon rounded-lg bg-primary/10 p-2 text-primary">
+          {icon}
+        </span>
       </CardContent>
     </Card>
   );

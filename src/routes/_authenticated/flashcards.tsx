@@ -22,6 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { useTx } from "@/lib/tx";
 import { toast } from "sonner";
+import "@/page-themes/flashcards.css";
 
 export const Route = createFileRoute("/_authenticated/flashcards")({
   head: () => ({
@@ -311,7 +312,7 @@ function FlashcardsPage() {
   return (
     <main
       dir={lang === "ar" ? "rtl" : "ltr"}
-      className="mx-auto w-full max-w-6xl px-3 pb-10 sm:px-6"
+      className="nemo-sea-page nemo-sea-page--flashcards mx-auto w-full max-w-6xl px-3 pb-10 sm:px-6"
     >
       <PageHeader
         title={tx("Flashcards", "البطاقات التعليمية")}

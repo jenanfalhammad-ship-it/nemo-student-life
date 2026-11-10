@@ -1,0 +1,214 @@
+.nemo-sea-page--onboarding {
+  min-height: 100vh;
+  padding: clamp(1rem, 4vw, 3.5rem);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 14% 12%, #3279d238, transparent 35%),
+    radial-gradient(ellipse at 82% 83%, #a05bbd24, transparent 36%),
+    linear-gradient(145deg, #101a38b8, #10162ed9);
+}
+
+.nemo-sea-page--onboarding::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(circle, #d7f6ff35 1px, transparent 1.5px);
+  background-position: 10px 20px;
+  background-size: 76px 92px;
+  opacity: 0.28;
+  pointer-events: none;
+  content: "";
+}
+
+.nemo-sea-page--onboarding .onboarding-shell {
+  width: min(100%, 1040px);
+  overflow: hidden;
+  border: 1px solid #8193c45c;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #1b2848ee, #141c38f5 60%, #211c43ee);
+  box-shadow:
+    inset 0 1px #ffffff14,
+    0 28px 90px #02081780,
+    0 0 55px #538ee51a;
+  backdrop-filter: blur(18px);
+}
+
+.nemo-sea-page--onboarding .onboarding-intro {
+  position: relative;
+  display: flex;
+  min-height: 210px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  overflow: hidden;
+  padding: clamp(1.5rem, 4vw, 2.8rem);
+  border-bottom: 1px solid #8297ce42;
+  background:
+    radial-gradient(ellipse at 80% 100%, #348cdd38, transparent 46%),
+    linear-gradient(105deg, #222d55a8, #1a2446a8);
+}
+
+.nemo-sea-page--onboarding .onboarding-intro::before,
+.nemo-sea-page--onboarding .onboarding-intro::after {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #bceeffa8;
+  border-radius: 50%;
+  background: #80dfff29;
+  box-shadow: 0 0 16px #71d9ff85;
+  content: "";
+}
+
+.nemo-sea-page--onboarding .onboarding-intro::before {
+  inset-inline-end: 30%;
+  top: 25%;
+}
+.nemo-sea-page--onboarding .onboarding-intro::after {
+  inset-inline-end: 12%;
+  bottom: 22%;
+  width: 6px;
+  height: 6px;
+}
+.nemo-sea-page--onboarding .onboarding-intro-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 630px;
+}
+.nemo-sea-page--onboarding .onboarding-title {
+  margin: 0.45rem 0 0.55rem;
+  color: #fbfaff;
+  font-size: clamp(1.8rem, 4vw, 2.65rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+}
+.nemo-sea-page--onboarding .onboarding-description {
+  max-width: 560px;
+  color: #c5cfea;
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+.nemo-sea-page--onboarding .onboarding-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #d2c0ff;
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.nemo-sea-page--onboarding .onboarding-kicker::before {
+  width: 22px;
+  height: 1px;
+  background: linear-gradient(90deg, #ff9bc8, #a78aff);
+  box-shadow: 0 0 8px #ac83ff;
+  content: "";
+}
+.nemo-sea-page--onboarding .onboarding-mascot {
+  position: relative;
+  z-index: 1;
+  width: clamp(92px, 15vw, 146px);
+  height: auto;
+  filter: drop-shadow(0 10px 22px #050b25a8) drop-shadow(0 0 17px #ff83c744);
+}
+.nemo-sea-page--onboarding .onboarding-body {
+  padding: clamp(1.3rem, 4vw, 2.5rem);
+}
+.nemo-sea-page--onboarding .onboarding-fields {
+  gap: 1.1rem 1.2rem;
+}
+.nemo-sea-page--onboarding .onboarding-fields > div {
+  align-content: start;
+}
+.nemo-sea-page--onboarding .onboarding-fields label {
+  color: #dce4ff;
+  font-size: 0.79rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+.nemo-sea-page--onboarding .onboarding-fields input {
+  height: 46px;
+  border: 1px solid #6876a3a8;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #111b39e8, #192342e8);
+  color: #fff;
+  box-shadow:
+    inset 0 1px #ffffff09,
+    0 5px 15px #090f2740;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+.nemo-sea-page--onboarding .onboarding-fields input:hover {
+  border-color: #9d91d8b5;
+}
+.nemo-sea-page--onboarding .onboarding-fields input:focus-visible {
+  border-color: #b7a1ff;
+  outline: 2px solid #9b83ff77;
+  outline-offset: 2px;
+  background: #172344;
+  box-shadow: 0 0 20px #846dff30;
+}
+.nemo-sea-page--onboarding .onboarding-actions {
+  padding-top: 0.35rem;
+}
+.nemo-sea-page--onboarding .onboarding-actions button {
+  min-height: 48px;
+  border: 1px solid #e9b1ff55;
+  border-radius: 14px;
+  background: linear-gradient(105deg, #7c70db, #a260bd 60%, #d27bab);
+  box-shadow:
+    inset 0 1px #ffffff45,
+    0 9px 24px #975de148;
+  color: #fff;
+  font-weight: 750;
+  transition:
+    filter 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.nemo-sea-page--onboarding .onboarding-actions button:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px #ffffff55,
+    0 12px 30px #975de16e;
+}
+.nemo-sea-page--onboarding .onboarding-status {
+  min-height: 230px;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  color: #cbd4f1;
+}
+.nemo-sea-page--onboarding .onboarding-status [role="alert"] {
+  color: #ffb0cb;
+}
+@media (max-width: 640px) {
+  .nemo-sea-page--onboarding {
+    padding: 0.75rem;
+  }
+  .nemo-sea-page--onboarding .onboarding-shell {
+    border-radius: 22px;
+  }
+  .nemo-sea-page--onboarding .onboarding-intro {
+    min-height: 185px;
+    padding: 1.35rem;
+  }
+  .nemo-sea-page--onboarding .onboarding-mascot {
+    width: 78px;
+    margin-inline-end: -0.5rem;
+  }
+  .nemo-sea-page--onboarding .onboarding-body {
+    padding: 1.2rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nemo-sea-page--onboarding .onboarding-fields input,
+  .nemo-sea-page--onboarding .onboarding-actions button {
+    transition: none;
+  }
+}

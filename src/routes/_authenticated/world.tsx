@@ -12,6 +12,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useTx } from "@/lib/tx";
 import { useQuery } from "@tanstack/react-query";
 
+import "@/page-themes/world.css";
+
 export const Route = createFileRoute("/_authenticated/world")({
   head: () => ({
     meta: [
@@ -116,7 +118,7 @@ function WorldPage() {
   }, [sessions]);
 
   return (
-    <div dir={dir} className="mx-auto w-full max-w-6xl pb-10">
+    <div dir={dir} className="nemo-sea-page nemo-sea-page--world mx-auto w-full max-w-6xl pb-10">
       <PageHeader
         title={tx("Nemo's world", "عالم نيمو")}
         sub={tx(

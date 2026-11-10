@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { useTx } from "@/lib/tx";
 import { toast } from "sonner";
+import "@/page-themes/courses.css";
 
 export const Route = createFileRoute("/_authenticated/courses")({
   head: () => ({
@@ -365,7 +366,7 @@ function CoursesPage() {
   return (
     <main
       dir={lang === "ar" ? "rtl" : "ltr"}
-      className="mx-auto w-full max-w-6xl px-3 pb-10 sm:px-6"
+      className="nemo-sea-page nemo-sea-page--courses courses-page mx-auto w-full max-w-6xl px-3 pb-10 sm:px-6"
     >
       <PageHeader
         title={tx("My courses", "موادي")}
@@ -394,7 +395,7 @@ function CoursesPage() {
         </p>
       ) : (
         <div className="grid gap-5 lg:grid-cols-[minmax(230px,0.8fr)_minmax(0,2fr)]">
-          <Card title={tx("Your courses", "المواد المسجلة")}>
+          <Card title={tx("Your courses", "المواد المسجلة")} className="courses-navigation">
             {courses.length === 0 ? (
               <div className="py-8 text-center">
                 <BookOpen className="mx-auto mb-3 h-8 w-8 text-muted-foreground" />
@@ -414,7 +415,7 @@ function CoursesPage() {
                         setSelectedId(course.id);
                         setNoteId(null);
                       }}
-                      className={`flex w-full items-start gap-3 rounded-lg border p-3 text-start transition hover:bg-accent ${selected?.id === course.id ? "border-primary/50 bg-accent/60" : "border-border"}`}
+                      className={`course-choice flex w-full items-start gap-3 rounded-lg border p-3 text-start transition hover:bg-accent ${selected?.id === course.id ? "is-selected border-primary/50 bg-accent/60" : "border-border"}`}
                     >
                       <span
                         className="mt-1 h-3 w-3 shrink-0 rounded-full"
@@ -508,6 +509,7 @@ function CoursesPage() {
               <>
                 <Card
                   title={selected.name}
+                  className="course-overview"
                   action={
                     <div className="flex gap-1">
                       <Button size="sm" variant="outline" onClick={() => startCourseEdit(selected)}>
@@ -558,6 +560,7 @@ function CoursesPage() {
                 </Card>
                 <Card
                   title={tx("Notes", "الملاحظات")}
+                  className="course-notes"
                   action={
                     <Button
                       size="sm"
@@ -573,7 +576,10 @@ function CoursesPage() {
                     </Button>
                   }
                 >
-                  <form onSubmit={submitNote} className="mb-4 grid gap-2 rounded-lg border p-3">
+                  <form
+                    onSubmit={submitNote}
+                    className="course-note-form mb-4 grid gap-2 rounded-lg border p-3"
+                  >
                     <Input
                       aria-label={tx("Note title", "عنوان الملاحظة")}
                       placeholder={tx("Note title", "عنوان الملاحظة")}
@@ -628,7 +634,7 @@ function CoursesPage() {
                   ) : (
                     <div className="grid gap-2">
                       {notesQuery.data?.map((note) => (
-                        <article key={note.id} className="rounded-lg border p-3">
+                        <article key={note.id} className="course-note rounded-lg border p-3">
                           <div className="flex items-start gap-2">
                             <div className="min-w-0 flex-1">
                               <h3 className="font-medium">{note.title}</h3>
@@ -672,6 +678,7 @@ function CoursesPage() {
                 </Card>
                 <Card
                   title={tx("Files", "الملفات")}
+                  className="course-files"
                   action={
                     <label className="inline-flex h-8 cursor-pointer items-center gap-2 rounded-md border border-input px-3 text-xs font-medium hover:bg-accent has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50">
                       <Upload className="h-4 w-4" />
@@ -712,7 +719,7 @@ function CoursesPage() {
                       {filesQuery.data?.map((file) => (
                         <li
                           key={file.id}
-                          className="flex min-w-0 items-center gap-3 rounded-lg border p-3"
+                          className="course-file flex min-w-0 items-center gap-3 rounded-lg border p-3"
                         >
                           <FileText className="h-5 w-5 shrink-0 text-muted-foreground" />
                           <span className="min-w-0 flex-1">

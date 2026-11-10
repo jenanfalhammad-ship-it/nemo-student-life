@@ -1,0 +1,268 @@
+.nemo-sea-page--events {
+  --events-line: color-mix(in srgb, var(--nemo-sea-line) 82%, #8cbfff 18%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.nemo-sea-page--events::before {
+  inset: -22px -18px -30px;
+  background:
+    radial-gradient(circle at 5% 17%, #b7efff22 0 2px, transparent 3px),
+    radial-gradient(circle at 95% 12%, #d2bbff21 0 3px, transparent 4px),
+    radial-gradient(circle at 86% 80%, #ff98c61b 0 2px, transparent 3px),
+    radial-gradient(ellipse at 69% 0%, #1c68b953, transparent 48%),
+    radial-gradient(ellipse at 5% 58%, #633e9b20, transparent 38%);
+}
+
+.nemo-sea-page--events .events-heading {
+  position: relative;
+  align-items: end;
+  padding: clamp(1.1rem, 3vw, 1.8rem);
+  overflow: hidden;
+  border: 1px solid var(--events-line);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 100% 0%, #3189dc38, transparent 44%),
+    radial-gradient(ellipse at 0% 110%, #dc82cc22, transparent 42%),
+    linear-gradient(135deg, #1c2b50f5, #151b38f5 74%);
+  box-shadow:
+    inset 0 1px #ffffff12,
+    0 16px 38px #080d2545;
+}
+
+.nemo-sea-page--events .events-heading::after {
+  position: absolute;
+  top: 1.1rem;
+  inset-inline-end: 1.25rem;
+  width: 9rem;
+  height: 5rem;
+  border: 1px solid #a8dfff24;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 100%, #8edaff18, transparent 65%);
+  box-shadow:
+    0 0 30px #55aaff12,
+    inset 0 -12px 20px #8fdcff0b;
+  content: "";
+  pointer-events: none;
+}
+
+.nemo-sea-page--events .events-eyebrow {
+  color: #d4baff;
+  letter-spacing: 0.035em;
+}
+.nemo-sea-page--events .events-title {
+  color: #f5f5ff;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  letter-spacing: -0.045em;
+  text-shadow: 0 4px 22px #a68aff35;
+}
+.nemo-sea-page--events .events-subtitle {
+  color: #bac7e5;
+}
+.nemo-sea-page--events .events-actions {
+  position: relative;
+  z-index: 1;
+}
+.nemo-sea-page--events .events-actions > * {
+  border-color: #7584b9a8;
+  border-radius: 13px;
+  box-shadow: 0 5px 16px #070c2038;
+}
+.nemo-sea-page--events .events-actions svg,
+.nemo-sea-page--events .events-list-card svg,
+.nemo-sea-page--events .events-form-card svg {
+  stroke-width: 2.15;
+}
+
+.nemo-sea-page--events .events-summary-card,
+.nemo-sea-page--events .events-form-card,
+.nemo-sea-page--events .events-list-card {
+  overflow: hidden;
+  border: 1px solid var(--events-line);
+  border-radius: 20px;
+  background: var(--nemo-sea-panel-strong);
+  color: var(--foreground);
+  box-shadow:
+    inset 0 1px #ffffff10,
+    0 12px 30px #080d2540;
+  backdrop-filter: blur(14px);
+}
+.nemo-sea-page--events .events-summary-card {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 100% 0%, #5898dc1a, transparent 52%),
+    linear-gradient(145deg, #202b50f2, #151c37f5);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.nemo-sea-page--events .events-summary-card:hover {
+  transform: translateY(-2px);
+  border-color: #8999d1c4;
+  box-shadow:
+    inset 0 1px #ffffff15,
+    0 16px 32px #080d2555;
+}
+.nemo-sea-page--events .events-summary-label {
+  color: #b6c3e2;
+}
+.nemo-sea-page--events .events-summary-card .text-2xl {
+  color: #f8f5ff;
+  font-size: 1.8rem;
+}
+.nemo-sea-page--events .events-summary-icon {
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border: 1px solid #a996ff55;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #8d77dc34, #5897d626);
+  color: #dfc5ff;
+  box-shadow:
+    inset 0 1px #ffffff12,
+    0 0 18px #9175ff20;
+}
+.nemo-sea-page--events .events-summary-icon svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  stroke-width: 2.1;
+}
+.nemo-sea-page--events .events-form-card {
+  border-color: #a28aff82;
+}
+.nemo-sea-page--events .events-list-card {
+  background: linear-gradient(150deg, #1a2445f7, #141b35f7);
+}
+.nemo-sea-page--events .events-list-header {
+  border-bottom: 1px solid #66749c55;
+}
+.nemo-sea-page--events .events-list-card [data-slot="card-title"] {
+  color: #f1f1ff;
+}
+.nemo-sea-page--events .events-row {
+  position: relative;
+  overflow: hidden;
+  border-color: #59678f9c;
+  border-radius: 17px;
+  background:
+    radial-gradient(ellipse at 100% 0%, #2867a51a, transparent 44%),
+    linear-gradient(115deg, #222c4df0, #19213ff2);
+  box-shadow:
+    inset 0 1px #ffffff0a,
+    0 8px 20px #090e252b;
+  transition:
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.nemo-sea-page--events .events-row:hover {
+  transform: translateY(-1px);
+  border-color: #8d94c7bd;
+  box-shadow:
+    inset 0 1px #ffffff10,
+    0 12px 24px #090e2540;
+}
+.nemo-sea-page--events .events-date {
+  min-height: 5.4rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #6f90ce65;
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse at 50% 0%, #56a9e339, transparent 72%),
+    linear-gradient(160deg, #26375e, #202442);
+  box-shadow:
+    inset 0 1px #ffffff13,
+    0 5px 13px #08102745;
+}
+.nemo-sea-page--events .events-date > span:first-child {
+  color: #d9c5ff;
+  letter-spacing: 0.07em;
+}
+.nemo-sea-page--events .events-date > strong {
+  color: #fff;
+  text-shadow: 0 0 17px #91c5ff4d;
+}
+.nemo-sea-page--events .events-date > span:last-child {
+  color: #b8c8e7;
+}
+.nemo-sea-page--events .events-name {
+  color: #f7f5ff;
+  font-size: 1rem;
+}
+.nemo-sea-page--events .events-row .rounded-full {
+  border: 1px solid #8090b941;
+  background: #333d624f;
+  color: #d7def5;
+}
+.nemo-sea-page--events .events-row .text-muted-foreground {
+  color: #b5c1df;
+}
+.nemo-sea-page--events .events-row-actions {
+  gap: 0.2rem;
+}
+.nemo-sea-page--events .events-row-actions button {
+  border: 1px solid transparent;
+  border-radius: 11px;
+  color: #c7d2f3;
+}
+.nemo-sea-page--events .events-row-actions button:hover {
+  border-color: #8f8bc777;
+  background: #8f84d528;
+  color: #fff;
+}
+.nemo-sea-page--events :is(input, textarea, [role="combobox"]) {
+  border-color: #5e6c97b8;
+  border-radius: 12px;
+  background-color: #121a35ed;
+}
+.nemo-sea-page--events :is(button, a, input, textarea, [role="combobox"]):focus-visible {
+  outline: 2px solid #b9a4ff;
+  outline-offset: 2px;
+}
+.nemo-sea-page--events .events-list-card .border-dashed {
+  border-color: #6978a99c;
+  border-radius: 18px;
+  background: #1d27443b;
+}
+.nemo-sea-page--events .events-list-card .border-dashed > svg {
+  color: #bba7ff;
+  stroke-width: 1.8;
+}
+
+@media (max-width: 640px) {
+  .nemo-sea-page--events {
+    gap: 1rem;
+  }
+  .nemo-sea-page--events .events-heading {
+    align-items: stretch;
+  }
+  .nemo-sea-page--events .events-heading::after {
+    width: 5.2rem;
+    height: 3rem;
+    opacity: 0.65;
+  }
+  .nemo-sea-page--events .events-actions > * {
+    flex: 1 1 auto;
+  }
+  .nemo-sea-page--events .events-date {
+    min-height: 0;
+    justify-content: flex-start;
+  }
+  .nemo-sea-page--events .events-row-actions {
+    align-self: flex-end;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nemo-sea-page--events .events-summary-card,
+  .nemo-sea-page--events .events-row {
+    transition: none;
+  }
+  .nemo-sea-page--events .events-summary-card:hover,
+  .nemo-sea-page--events .events-row:hover {
+    transform: none;
+  }
+}

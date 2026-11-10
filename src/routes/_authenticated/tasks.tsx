@@ -34,6 +34,8 @@ import { fromLocalInput, toLocalInput, useInsert, useRemove, useRows, useUpdate 
 import { useTx } from "@/lib/tx";
 import type { Row } from "@/lib/data";
 
+import "@/page-themes/tasks.css";
+
 export const Route = createFileRoute("/_authenticated/tasks")({
   head: () => ({
     meta: [
@@ -234,7 +236,7 @@ function TasksPage() {
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="nemo-sea-page nemo-sea-page--tasks space-y-5">
       <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-card to-lavender/45 p-5 shadow-soft sm:p-7">
         <div className="pointer-events-none absolute -end-8 -top-12 h-48 w-48 rounded-full bg-peach/60 blur-3xl" />
         <div className="relative flex flex-col justify-between gap-4 sm:flex-row sm:items-end">

@@ -1,0 +1,282 @@
+.nemo-sea-page--countdown {
+  --countdown-surface: linear-gradient(148deg, #1c2849f5, #151c37f5 76%);
+  --countdown-line: #66759e9c;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+.nemo-sea-page--countdown::before {
+  inset: -22px -18px -34px;
+  background:
+    radial-gradient(circle at 6% 12%, #b9efff1e 0 2px, transparent 2.8px),
+    radial-gradient(circle at 95% 17%, #b9efff18 0 3px, transparent 3.8px),
+    radial-gradient(circle at 80% 79%, #f395d91a 0 2px, transparent 3px),
+    radial-gradient(ellipse at 63% 0%, #174b8e50, transparent 46%),
+    radial-gradient(ellipse at 8% 84%, #713f8730, transparent 35%);
+}
+.nemo-sea-page--countdown .countdown-heading {
+  position: relative;
+  padding: 0.45rem 0.2rem 0.2rem;
+}
+.nemo-sea-page--countdown .countdown-heading > div:first-child > p:first-child {
+  color: #c9b6ff;
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.035em;
+}
+.nemo-sea-page--countdown .countdown-heading h1 {
+  color: #f6f5ff;
+  font-size: clamp(1.8rem, 3vw, 2.55rem);
+  font-weight: 820;
+  letter-spacing: -0.045em;
+  text-shadow: 0 0 30px #779eff24;
+}
+.nemo-sea-page--countdown .countdown-heading > div:first-child > p:nth-of-type(2) {
+  max-width: 40rem;
+  color: #b8c5e4;
+}
+.nemo-sea-page--countdown :is(.countdown-heading > button, .countdown-form button[type="submit"]) {
+  border: 1px solid #d7a0ff75;
+  border-radius: 14px;
+  background: linear-gradient(130deg, #7461d1, #51489f 65%, #644284);
+  color: #fff;
+  box-shadow:
+    inset 0 1px #ffffff2c,
+    0 8px 24px #7557d344;
+}
+.nemo-sea-page--countdown
+  :is(.countdown-feature, .countdown-list, .countdown-form, .countdown-metric) {
+  border: 1px solid var(--countdown-line);
+  border-radius: 22px;
+  background: var(--countdown-surface);
+  color: #f1f3ff;
+  box-shadow:
+    inset 0 1px #ffffff0e,
+    0 16px 38px #070d253d;
+  backdrop-filter: blur(16px);
+}
+.nemo-sea-page--countdown .countdown-feature {
+  position: relative;
+  min-height: 190px;
+  border-color: #83a7e079;
+  background:
+    radial-gradient(ellipse at 86% 5%, #3d8ddd38, transparent 42%),
+    radial-gradient(ellipse at 6% 100%, #d16ba433, transparent 43%),
+    linear-gradient(120deg, #172a50, #1b2142 62%, #302346);
+}
+.nemo-sea-page--countdown .countdown-feature::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #73d6ff, #c9a3ff, #ff9bc9, transparent);
+  opacity: 0.8;
+  content: "";
+}
+.nemo-sea-page--countdown .countdown-feature > div {
+  position: relative;
+  z-index: 1;
+}
+.nemo-sea-page--countdown .countdown-feature > div > div:first-child > p:first-child {
+  color: #c7b7ff;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.nemo-sea-page--countdown .countdown-feature h2 {
+  color: #fff;
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  letter-spacing: -0.025em;
+}
+.nemo-sea-page--countdown .countdown-feature > div > div:first-child > p:last-child {
+  color: #c0cee9;
+}
+.nemo-sea-page--countdown .countdown-parts {
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+.nemo-sea-page--countdown .countdown-feature .countdown-parts {
+  gap: 0.7rem;
+}
+.nemo-sea-page--countdown .countdown-part {
+  border: 1px solid #93a6d752;
+  background: linear-gradient(145deg, #27385dce, #171f3cdd);
+  color: #f5f4ff;
+  box-shadow:
+    inset 0 1px #ffffff12,
+    0 4px 14px #090e2830;
+}
+.nemo-sea-page--countdown .countdown-feature .countdown-part {
+  min-width: 96px;
+  border-color: #b8c6ed55;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #ffffff1c, #ffffff0a);
+  backdrop-filter: blur(8px);
+}
+.nemo-sea-page--countdown .countdown-feature .countdown-part strong {
+  display: block;
+  color: #fff;
+  font-size: clamp(1.55rem, 3.5vw, 2.1rem);
+  line-height: 1.15;
+  text-shadow: 0 0 15px #94d9ff64;
+  font-variant-numeric: tabular-nums;
+}
+.nemo-sea-page--countdown .countdown-feature .countdown-part span {
+  color: #d5ddf4;
+  font-size: 0.72rem;
+}
+.nemo-sea-page--countdown .countdown-metrics {
+  gap: 0.8rem;
+}
+.nemo-sea-page--countdown .countdown-metric {
+  border-radius: 17px;
+  background: linear-gradient(145deg, #202d4df0, #171f3bf0);
+}
+.nemo-sea-page--countdown .countdown-metric p:first-child {
+  color: #adbbdb;
+}
+.nemo-sea-page--countdown .countdown-metric p:last-child {
+  color: #f5f4ff;
+  font-size: 1.7rem;
+}
+.nemo-sea-page--countdown .countdown-metric span {
+  border: 1px solid #a98bff55;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #4d4385, #26365c);
+  color: #d5c5ff;
+  box-shadow: 0 0 15px #9b85ff1a;
+}
+.nemo-sea-page--countdown .countdown-list {
+  overflow: hidden;
+}
+.nemo-sea-page--countdown .countdown-list > div:first-child {
+  padding: 1.15rem 1.25rem 0.85rem;
+}
+.nemo-sea-page--countdown .countdown-list h2,
+.nemo-sea-page--countdown .countdown-form h2 {
+  color: #f3f2ff;
+}
+.nemo-sea-page--countdown :is(.countdown-list, .countdown-form) .text-muted-foreground {
+  color: #aebbd9;
+}
+.nemo-sea-page--countdown .countdown-list > div:last-child {
+  padding: 0 1.2rem 1.2rem;
+}
+.nemo-sea-page--countdown .countdown-list > div:first-child > div:last-child {
+  gap: 0.45rem;
+}
+.nemo-sea-page--countdown .countdown-list > div:first-child > div:last-child button {
+  border-color: #64729a9c;
+  border-radius: 11px;
+  background: #202b4b;
+  color: #e8eaff;
+}
+.nemo-sea-page--countdown
+  .countdown-list
+  > div:first-child
+  > div:last-child
+  button[class*="bg-primary"] {
+  border-color: #b49cff90;
+  background: linear-gradient(135deg, #675dc4, #483f91);
+  color: #fff;
+  box-shadow: 0 0 16px #8874e62b;
+}
+.nemo-sea-page--countdown .countdown-list input,
+.nemo-sea-page--countdown .countdown-form input,
+.nemo-sea-page--countdown .countdown-form [role="combobox"] {
+  border-color: #66749bc4;
+  border-radius: 12px;
+  background: #111a33;
+  color: #f5f3ff;
+}
+.nemo-sea-page--countdown .countdown-form {
+  border-color: #a879d6a1;
+}
+.nemo-sea-page--countdown .countdown-item {
+  overflow: hidden;
+  border: 1px solid #64729a99;
+  border-radius: 17px;
+  background:
+    radial-gradient(ellipse at 100% 0%, #4f4b8530, transparent 58%),
+    linear-gradient(145deg, #222d4c, #19223e);
+  color: #f3f3ff;
+  box-shadow:
+    inset 0 1px #ffffff0d,
+    0 7px 20px #090e2733;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.nemo-sea-page--countdown .countdown-item:hover {
+  transform: translateY(-2px);
+  border-color: #a89affb0;
+  box-shadow:
+    0 10px 25px #090e274d,
+    0 0 18px #8b78ff20;
+}
+.nemo-sea-page--countdown .countdown-item p:first-child {
+  color: #f5f3ff;
+}
+.nemo-sea-page--countdown .countdown-item .text-muted-foreground {
+  color: #aebbd9;
+}
+.nemo-sea-page--countdown
+  :is(
+    button[aria-label="Edit"],
+    button[aria-label="تعديل"],
+    button[aria-label="Delete"],
+    button[aria-label="حذف"]
+  ) {
+  border: 1px solid #6d7aa277;
+  border-radius: 10px;
+  color: #e5e7ff;
+}
+.nemo-sea-page--countdown :is(button[aria-label="Edit"], button[aria-label="تعديل"]):hover {
+  background: #32335d;
+  color: #c9b8ff;
+}
+.nemo-sea-page--countdown :is(button[aria-label="Delete"], button[aria-label="حذف"]):hover {
+  background: #482941;
+  color: #ff9fbe;
+}
+.nemo-sea-page--countdown :is(.countdown-item, .countdown-metric, .countdown-feature) svg {
+  stroke-width: 2.15;
+  filter: drop-shadow(0 0 5px #6dcaff48);
+}
+.nemo-sea-page--countdown .countdown-item > div:last-child > div.rounded-xl.border-dashed {
+  border-color: #7887b17d;
+  border-radius: 17px;
+  background: #121b35a8;
+  color: #e8eaff;
+}
+@media (max-width: 640px) {
+  .nemo-sea-page--countdown {
+    gap: 1rem;
+  }
+  .nemo-sea-page--countdown .countdown-heading {
+    padding-inline: 0;
+  }
+  .nemo-sea-page--countdown .countdown-list > div:first-child {
+    padding: 1rem 0.85rem 0.75rem;
+  }
+  .nemo-sea-page--countdown .countdown-list > div:last-child {
+    padding: 0 0.75rem 0.9rem;
+  }
+  .nemo-sea-page--countdown .countdown-feature > div {
+    align-items: flex-start;
+  }
+  .nemo-sea-page--countdown .countdown-feature .countdown-part {
+    min-width: 75px;
+    padding-inline: 0.7rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nemo-sea-page--countdown *,
+  .nemo-sea-page--countdown *::before,
+  .nemo-sea-page--countdown *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,233 @@
+.nemo-sea-page--ask {
+  --ask-glass: linear-gradient(145deg, #1b2b50ef, #121b36f2);
+  --ask-outline: #91a8e73d;
+  --ask-coral: #ff9bc7;
+  --ask-blue: #80d9ff;
+}
+
+.nemo-sea-page--ask::before {
+  inset: -18px -16px -28px;
+  background:
+    radial-gradient(ellipse at 18% 14%, #239be02a, transparent 38%),
+    radial-gradient(ellipse at 90% 38%, #a66ee622, transparent 34%),
+    radial-gradient(circle at 7% 58%, #8eeaff20 0 2px, transparent 3px),
+    radial-gradient(circle at 96% 82%, #ff9bc71b 0 3px, transparent 4px);
+}
+
+.nemo-sea-page--ask :is(h1, h2, p) {
+  color: inherit;
+}
+.nemo-sea-page--ask > div:first-child {
+  position: relative;
+}
+.nemo-sea-page--ask .mb-6.flex.flex-wrap.items-end {
+  margin-bottom: 1.35rem;
+  padding: 0.3rem 0.2rem 0.9rem;
+  border-bottom: 1px solid #93b5ff24;
+}
+.nemo-sea-page--ask .mb-6.flex.flex-wrap.items-end h1 {
+  color: #f2f4ff;
+  letter-spacing: -0.04em;
+  text-shadow: 0 0 22px #8c83ff55;
+}
+.nemo-sea-page--ask .ask-intro {
+  position: relative;
+  min-height: 132px;
+  border-color: #da9dff45;
+  background:
+    radial-gradient(ellipse at 6% 110%, #2388ca33, transparent 48%),
+    linear-gradient(110deg, #18284bf5 0%, #25234df0 57%, #33254ff0 100%);
+  box-shadow:
+    inset 0 1px #ffffff12,
+    0 14px 36px #080d2645,
+    0 0 26px #5b69c31b;
+}
+.nemo-sea-page--ask .ask-intro::after {
+  position: absolute;
+  inset-inline-end: 5%;
+  bottom: -26px;
+  width: 110px;
+  height: 100px;
+  border: 1px solid #ff9bc72b;
+  border-radius: 55% 45% 60% 40%;
+  transform: rotate(-22deg);
+  pointer-events: none;
+  content: "";
+}
+.nemo-sea-page--ask .ask-intro img {
+  width: 96px;
+  height: 96px;
+  filter: drop-shadow(0 0 18px #ff86c653);
+}
+.nemo-sea-page--ask .ask-intro p:first-child {
+  color: #fff2fc;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+}
+.nemo-sea-page--ask .ask-intro p + p {
+  max-width: 38rem;
+  color: #bdc9e8;
+}
+.nemo-sea-page--ask .ask-intro p:last-child {
+  color: #9cddff;
+}
+.nemo-sea-page--ask .ask-layout {
+  align-items: start;
+  gap: 1.1rem;
+}
+.nemo-sea-page--ask .ask-chat {
+  border-color: var(--ask-outline);
+  border-radius: 24px;
+  background: var(--ask-glass);
+  box-shadow:
+    inset 0 1px #ffffff0c,
+    0 18px 42px #080d2859,
+    0 0 28px #407cca16;
+  backdrop-filter: blur(16px);
+}
+.nemo-sea-page--ask .ask-transcript {
+  background:
+    radial-gradient(ellipse at 78% 0%, #216dc52c, transparent 40%),
+    radial-gradient(ellipse at 0% 100%, #714e9d22, transparent 38%),
+    linear-gradient(180deg, #101a34d9, #121a32f2);
+  scrollbar-color: #706eb8 #131c36;
+}
+.nemo-sea-page--ask .ask-transcript > p {
+  margin: 3rem auto;
+  max-width: 23rem;
+  padding: 1.5rem;
+  border: 1px dashed #99b7ff4d;
+  border-radius: 20px;
+  background: #8bcfff09;
+  color: #c1d0ef;
+}
+.nemo-sea-page--ask .ask-transcript > div.flex.items-end > span {
+  border: 1px solid #ff9bc74c;
+  color: #ffd2eb;
+  background: linear-gradient(145deg, #8c4c8290, #483b7590);
+  box-shadow: 0 0 16px #ff83c526;
+}
+.nemo-sea-page--ask .ask-transcript > div.flex.items-end > div {
+  border: 1px solid #98b9f33a;
+  border-radius: 19px;
+  background: linear-gradient(145deg, #1b2d50f2, #19203ef2);
+  box-shadow:
+    inset 0 1px #ffffff0c,
+    0 8px 20px #080d253b;
+  color: #e7edff;
+}
+.nemo-sea-page--ask .ask-transcript > div.flex.items-end > div.rounded-ee-md {
+  border-color: #a899ff75;
+  background: linear-gradient(135deg, #6258b7, #3c4d91);
+  box-shadow:
+    inset 0 1px #ffffff25,
+    0 7px 22px #4a58bb38;
+  color: #fff;
+}
+.nemo-sea-page--ask .ask-transcript > div.flex.items-end > div .text-primary {
+  color: #ffc1df;
+}
+.nemo-sea-page--ask .ask-chat > form {
+  border-color: #6679a63f;
+  background: #121b36f5;
+  padding: 0.9rem;
+}
+.nemo-sea-page--ask .ask-chat > form input {
+  min-height: 46px;
+  border-color: #7387bc61;
+  background: #0e1730;
+}
+.nemo-sea-page--ask .ask-chat > form button {
+  width: 48px;
+  height: 46px;
+  border: 1px solid #cfb2ff69;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #8e76e4, #5b62b9);
+  box-shadow: 0 0 18px #9478ff38;
+}
+.nemo-sea-page--ask .ask-chat > form button svg,
+.nemo-sea-page--ask .ask-prompts svg {
+  stroke-width: 2.2;
+}
+.nemo-sea-page--ask .ask-prompts > div:first-child {
+  border: 1px solid #9c8bdb52;
+  border-radius: 22px;
+  padding: 0.9rem;
+  background:
+    radial-gradient(ellipse at 100% 0%, #4f73b627, transparent 48%),
+    linear-gradient(145deg, #1b2546f2, #151c37f2);
+  box-shadow:
+    inset 0 1px #ffffff0b,
+    0 12px 30px #080d2540;
+}
+.nemo-sea-page--ask .ask-prompts > div:first-child > p {
+  color: #d9ccff;
+}
+.nemo-sea-page--ask .ask-prompts button {
+  justify-content: flex-start;
+  border-color: #8499cb54;
+  border-radius: 14px;
+  background: linear-gradient(110deg, #202c4cdb, #1b2440e8);
+  color: #e2e9ff;
+  box-shadow:
+    inset 0 1px #ffffff09,
+    0 5px 14px #080d252e;
+}
+.nemo-sea-page--ask .ask-prompts button svg {
+  color: var(--ask-blue);
+  filter: drop-shadow(0 0 5px #77d8ff6b);
+}
+.nemo-sea-page--ask .ask-prompts button:hover {
+  border-color: #ce9cff91;
+  background: #293354;
+}
+.nemo-sea-page--ask .ask-prompts button:first-child {
+  color: #ffd0e6;
+}
+.nemo-sea-page--ask .ask-prompts > p {
+  color: #aebcdd;
+}
+.nemo-sea-page--ask .ask-prompts > p svg {
+  color: #94e4ff;
+  stroke-width: 2.5;
+}
+.nemo-sea-page--ask .ask-chat > div[aria-live="polite"] + div {
+  border-color: #ff9bc735;
+  background: #522e4866;
+  color: #ffe7f2;
+}
+.nemo-sea-page--ask button:focus-visible {
+  outline: 2px solid #bdacff;
+  outline-offset: 2px;
+}
+
+@media (min-width: 1024px) {
+  .nemo-sea-page--ask .ask-prompts {
+    position: sticky;
+    top: 1rem;
+  }
+}
+@media (max-width: 640px) {
+  .nemo-sea-page--ask .ask-intro {
+    align-items: flex-start;
+    min-height: 0;
+    padding: 1rem;
+  }
+  .nemo-sea-page--ask .ask-intro img {
+    width: 68px;
+    height: 68px;
+  }
+  .nemo-sea-page--ask .ask-intro p:first-child {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  .nemo-sea-page--ask .ask-layout {
+    gap: 0.85rem;
+  }
+  .nemo-sea-page--ask .ask-transcript {
+    min-height: 280px;
+    padding: 1rem;
+  }
+  .nemo-sea-page--ask .ask-chat > form {
+    padding: 0.7rem;
+  }
+}

@@ -1,0 +1,236 @@
+.nemo-sea-page--flashcards {
+  --flash-line: #6475a8b0;
+  --flash-glass: linear-gradient(145deg, #1b2949f5, #141d39f7);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nemo-sea-page--flashcards::before {
+  inset: -24px -18px -36px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 7% 12%, #b7efff29 0 2px, transparent 3px),
+    radial-gradient(circle at 93% 14%, #b7efff20 0 3px, transparent 4px),
+    radial-gradient(circle at 84% 74%, #ff98c61e 0 2px, transparent 3px),
+    radial-gradient(ellipse at 62% 0%, #157fc248, transparent 45%),
+    radial-gradient(ellipse at 8% 100%, #9758c42d, transparent 35%);
+}
+
+.nemo-sea-page--flashcards > div:first-of-type {
+  position: relative;
+  z-index: 1;
+  padding: 8px 0 12px;
+}
+
+.nemo-sea-page--flashcards > div:first-of-type h1 {
+  color: #f5f4ff;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 820;
+  letter-spacing: -0.04em;
+  text-shadow: 0 0 28px #a9a4ff35;
+}
+
+.nemo-sea-page--flashcards > div:first-of-type p {
+  margin-top: 7px;
+  color: #b8c8e7;
+  font-size: 0.94rem;
+}
+
+.nemo-sea-page--flashcards > div:first-of-type button,
+.nemo-sea-page--flashcards section > div:first-child > button {
+  border-color: #847bd0a1;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6258b6, #45417f);
+  color: #fff;
+  box-shadow:
+    inset 0 1px #ffffff20,
+    0 7px 18px #090e2b42;
+}
+
+.nemo-sea-page--flashcards > div:first-of-type button:hover,
+.nemo-sea-page--flashcards section > div:first-child > button:hover {
+  border-color: #c3b5ff;
+  filter: brightness(1.12);
+}
+
+.nemo-sea-page--flashcards > div:nth-of-type(2) {
+  gap: 18px;
+}
+
+.nemo-sea-page--flashcards section.card-soft {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--flash-line);
+  border-radius: 21px;
+  background: radial-gradient(ellipse at 96% 0%, #167eb724, transparent 41%), var(--flash-glass);
+  box-shadow:
+    inset 0 1px #ffffff12,
+    0 16px 38px #080d2747;
+  backdrop-filter: blur(15px);
+}
+
+.nemo-sea-page--flashcards section.card-soft::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #a8dfff9c, #d4a3ff75, transparent);
+  content: "";
+  pointer-events: none;
+}
+
+.nemo-sea-page--flashcards section.card-soft > div:first-child {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #61709a5c;
+}
+
+.nemo-sea-page--flashcards section.card-soft h2 {
+  color: #f0efff;
+  font-size: 0.98rem;
+  font-weight: 760;
+  letter-spacing: -0.015em;
+}
+
+.nemo-sea-page--flashcards .text-muted-foreground {
+  color: #b4c3e2;
+}
+
+.nemo-sea-page--flashcards li {
+  border-color: #5b6b95b5;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #202b4ad9, #161f3be8);
+  box-shadow: inset 0 1px #ffffff0a;
+}
+
+.nemo-sea-page--flashcards li:has(> button) {
+  padding: 10px;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.nemo-sea-page--flashcards li:has(> button):hover {
+  border-color: #91bde4a8;
+  transform: translateY(-1px);
+}
+
+.nemo-sea-page--flashcards li.border-primary\/50 {
+  border-color: #b0a1ffbf;
+  background:
+    radial-gradient(ellipse at 0% 50%, #b180f232, transparent 67%),
+    linear-gradient(135deg, #33366a, #1c294a);
+  box-shadow:
+    inset 3px 0 #c4a5ff,
+    0 0 22px #8171d42b;
+}
+
+.nemo-sea-page--flashcards section.card-soft > div > div.mx-auto.max-w-2xl {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-color: #8b8bd0b8;
+  border-radius: 25px;
+  background:
+    radial-gradient(ellipse at 50% 0%, #328acb42, transparent 54%),
+    radial-gradient(ellipse at 100% 100%, #aa66c638, transparent 47%),
+    linear-gradient(145deg, #222f55, #171d3c 68%, #211d45);
+  box-shadow:
+    inset 0 1px #ffffff24,
+    0 20px 46px #050b2670,
+    0 0 30px #6c7fe52b;
+}
+
+.nemo-sea-page--flashcards section.card-soft > div > div.mx-auto.max-w-2xl::after {
+  position: absolute;
+  z-index: -1;
+  inset: 9px;
+  border: 1px solid #b9c4ff35;
+  border-radius: 18px;
+  content: "";
+  pointer-events: none;
+}
+
+.nemo-sea-page--flashcards section.card-soft > div > div.mx-auto.max-w-2xl button {
+  padding: 18px;
+  color: #fbfaff;
+  font-size: clamp(1.25rem, 2.4vw, 1.8rem);
+  line-height: 1.5;
+  text-shadow: 0 3px 20px #a9cfff45;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.nemo-sea-page--flashcards section.card-soft > div > div.mx-auto.max-w-2xl button:hover {
+  color: #f2ddff;
+  transform: scale(1.012);
+}
+
+.nemo-sea-page--flashcards section.card-soft > div > div.mx-auto.max-w-2xl > p:last-child {
+  color: #c7b5ff;
+  letter-spacing: 0.045em;
+}
+
+.nemo-sea-page--flashcards :is(button, label, input, textarea, select) svg,
+.nemo-sea-page--flashcards section.card-soft > div:first-child svg {
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 5px #9bbaff66);
+}
+
+.nemo-sea-page--flashcards section.card-soft :is(input, textarea, select) {
+  border-color: #6474a2;
+  background: #101a34e8;
+}
+
+.nemo-sea-page--flashcards section.card-soft form {
+  padding: 14px;
+  border-color: #6979a08c;
+  border-radius: 16px;
+  background: radial-gradient(ellipse at 100% 0%, #8b72c31b, transparent 50%), #121c36c9;
+}
+
+.nemo-sea-page--flashcards section.card-soft input[type="checkbox"] {
+  accent-color: #b39aff;
+  box-shadow: 0 0 10px #a88bff45;
+}
+
+.nemo-sea-page--flashcards section.card-soft [role="alert"] {
+  border-radius: 14px;
+  background: #542e5261;
+  box-shadow: inset 0 0 0 1px #ff98c62a;
+}
+
+@media (max-width: 1023px) {
+  .nemo-sea-page--flashcards > div:nth-of-type(2) {
+    gap: 14px;
+  }
+}
+
+@media (max-width: 639px) {
+  .nemo-sea-page--flashcards > div:first-of-type {
+    align-items: flex-start;
+  }
+
+  .nemo-sea-page--flashcards > div:first-of-type button {
+    min-height: 42px;
+  }
+
+  .nemo-sea-page--flashcards section.card-soft {
+    border-radius: 18px;
+  }
+
+  .nemo-sea-page--flashcards section.card-soft > div > div.mx-auto.max-w-2xl {
+    padding: 18px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nemo-sea-page--flashcards li:has(> button),
+  .nemo-sea-page--flashcards section.card-soft > div > div.mx-auto.max-w-2xl button {
+    transition: none;
+  }
+}

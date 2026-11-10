@@ -20,6 +20,8 @@ import { useTx } from "@/lib/tx";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ANIMALS } from "@/lib/catalog";
 
+import "@/page-themes/together.css";
+
 export const Route = createFileRoute("/_authenticated/together")({
   head: () => ({
     meta: [
@@ -236,7 +238,7 @@ function TogetherPage() {
   const busy = createMutation.isPending || joinMutation.isPending;
 
   return (
-    <div dir={dir} className="mx-auto w-full max-w-6xl pb-10">
+    <div dir={dir} className="nemo-sea-page nemo-sea-page--together mx-auto w-full max-w-6xl pb-10">
       <PageHeader
         title={tx("Study together", "ذاكر مع أصدقائك")}
         sub={tx(
@@ -454,7 +456,16 @@ function TogetherPage() {
                   </button>
                 </div>
                 <div className="border-t px-4 py-4 sm:px-5">
-                  <div className="mb-3 flex items-center justify-between gap-2"><h4 className="text-xs font-semibold">{t("members")}</h4><Link to="/focus" className="inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-medium hover:bg-muted"><Timer className="h-3 w-3" />{tx("Open focus room", "افتح جلسة التركيز")}</Link></div>
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <h4 className="text-xs font-semibold">{t("members")}</h4>
+                    <Link
+                      to="/focus"
+                      className="inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-medium hover:bg-muted"
+                    >
+                      <Timer className="h-3 w-3" />
+                      {tx("Open focus room", "افتح جلسة التركيز")}
+                    </Link>
+                  </div>
                   {room.members.length ? (
                     <ul className="grid gap-2 sm:grid-cols-2">
                       {room.members.map((member) => (
@@ -463,17 +474,22 @@ function TogetherPage() {
                           className="flex min-w-0 items-center justify-between gap-2 rounded-lg bg-muted/35 px-3 py-2"
                         >
                           <span className="flex min-w-0 items-center gap-2 truncate text-xs font-medium">
-                            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sage-soft text-lg">{member.user_id === user?.id ? "🐙" : ANIMALS.find((animal) => animal.key === "fox")?.emoji ?? "🦊"}</span>
+                            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sage-soft text-lg">
+                              {member.user_id === user?.id
+                                ? "🐙"
+                                : (ANIMALS.find((animal) => animal.key === "fox")?.emoji ?? "🦊")}
+                            </span>
                             <span className="truncate">
-                            {member.display_name || tx("Member", "عضو")}
-                            {member.user_id === user?.id && (
-                              <span className="ms-1 text-muted-foreground">
-                                · {tx("you", "أنت")}
-                              </span>
-                            )}
+                              {member.display_name || tx("Member", "عضو")}
+                              {member.user_id === user?.id && (
+                                <span className="ms-1 text-muted-foreground">
+                                  · {tx("you", "أنت")}
+                                </span>
+                              )}
                             </span>
                           </span>
-                          <span className="flex shrink-0 items-center gap-1 text-[10px] text-muted-foreground"><PawPrint className="h-3 w-3 text-primary" />
+                          <span className="flex shrink-0 items-center gap-1 text-[10px] text-muted-foreground">
+                            <PawPrint className="h-3 w-3 text-primary" />
                             {member.status === "studying"
                               ? t("studying")
                               : member.status === "break"

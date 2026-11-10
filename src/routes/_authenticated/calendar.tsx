@@ -33,6 +33,7 @@ import {
 } from "@/lib/data";
 import { useTx } from "@/lib/tx";
 import type { Row } from "@/lib/data";
+import "@/page-themes/calendar.css";
 
 export const Route = createFileRoute("/_authenticated/calendar")({
   head: () => ({
@@ -182,11 +183,21 @@ function CalendarPage() {
     return d.toLocaleDateString(locale, { weekday: "short" });
   });
   const todayKey = keyOf(new Date());
-  const gregorianSelected = selected.toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  const hijriSelected = selected.toLocaleDateString("ar-SA-u-ca-islamic", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const gregorianSelected = selected.toLocaleDateString(locale, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  const hijriSelected = selected.toLocaleDateString("ar-SA-u-ca-islamic", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+    <div className="nemo-sea-page nemo-sea-page--calendar space-y-6">
+      <div className="calendar-heading flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <p className="text-sm font-medium text-primary">
             {tx("Your saved dates, at a glance", "مواعيدك المحفوظة في نظرة واحدة")}
@@ -198,7 +209,14 @@ function CalendarPage() {
               "اختر يومًا لعرض فعالياته ومواعيده المحفوظة.",
             )}
           </p>
-          <div className="mt-3 flex flex-wrap gap-2 text-xs"><span className="rounded-full bg-primary/10 px-3 py-1.5 font-medium text-primary">{gregorianSelected}</span><span className="rounded-full bg-sage-soft px-3 py-1.5 font-medium text-primary-deep">{hijriSelected}</span></div>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs">
+            <span className="rounded-full bg-primary/10 px-3 py-1.5 font-medium text-primary">
+              {gregorianSelected}
+            </span>
+            <span className="rounded-full bg-sage-soft px-3 py-1.5 font-medium text-primary-deep">
+              {hijriSelected}
+            </span>
+          </div>
         </div>
         <Button onClick={openCreate}>
           <Plus />
@@ -206,7 +224,7 @@ function CalendarPage() {
         </Button>
       </div>
       {showForm && (
-        <Card className="border-primary/30">
+        <Card className="calendar-form border-primary/30">
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-lg">
               {editing
@@ -314,9 +332,9 @@ function CalendarPage() {
           </CardContent>
         </Card>
       )}
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.25fr)_minmax(300px,0.75fr)]">
-        <Card>
-          <CardHeader className="flex flex-col gap-4">
+      <div className="calendar-layout grid gap-5 xl:grid-cols-[minmax(0,1.25fr)_minmax(300px,0.75fr)]">
+        <Card className="calendar-board">
+          <CardHeader className="calendar-board-header flex flex-col gap-4">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-1">
                 <Button
@@ -369,7 +387,7 @@ function CalendarPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-7 border-b pb-2">
+            <div className="calendar-weekdays grid grid-cols-7 border-b pb-2">
               {weekdays.map((day, i) => (
                 <div
                   key={`${day}-${i}`}
@@ -379,7 +397,7 @@ function CalendarPage() {
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-7">
+            <div className="calendar-grid grid grid-cols-7">
               {days.map((day) => {
                 const inMonth = day.getMonth() === viewMonth.getMonth();
                 const isSelected = keyOf(day) === keyOf(selected);
@@ -390,7 +408,7 @@ function CalendarPage() {
                     key={day.toISOString()}
                     type="button"
                     onClick={() => setSelected(day)}
-                    className={`relative flex min-h-[76px] flex-col items-center gap-1 border-b border-e p-1.5 text-sm transition-colors hover:bg-accent sm:min-h-[94px] sm:p-2 ${!inMonth ? "text-muted-foreground/50" : ""} ${isSelected ? "bg-primary/5 ring-1 ring-inset ring-primary" : ""}`}
+                    className={`calendar-day relative flex min-h-[76px] flex-col items-center gap-1 border-b border-e p-1.5 text-sm transition-colors hover:bg-accent sm:min-h-[94px] sm:p-2 ${!inMonth ? "text-muted-foreground/50" : ""} ${isSelected ? "bg-primary/5 ring-1 ring-inset ring-primary" : ""}`}
                   >
                     <span
                       className={`grid h-7 w-7 place-items-center rounded-full ${isToday ? "bg-primary text-primary-foreground" : ""} ${isSelected && !isToday ? "font-bold text-primary" : ""}`}
@@ -417,7 +435,7 @@ function CalendarPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="h-fit">
+        <Card className="calendar-agenda h-fit">
           <CardHeader className="flex flex-row items-start justify-between gap-2">
             <div>
               <p className="text-sm text-muted-foreground">{tx("Selected day", "اليوم المحدد")}</p>
@@ -458,7 +476,7 @@ function CalendarPage() {
                 return (
                   <div
                     key={`${event.id}-${event.occ.toISOString()}`}
-                    className="rounded-xl border p-3"
+                    className="calendar-event rounded-xl border p-3"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">

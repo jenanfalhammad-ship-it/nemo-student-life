@@ -11,6 +11,8 @@ import { useI18n } from "@/lib/i18n";
 import { useTheme, type Theme } from "@/lib/theme";
 import { useTx } from "@/lib/tx";
 
+import "@/page-themes/settings.css";
+
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
@@ -175,7 +177,7 @@ function Settings() {
   };
 
   return (
-    <div dir={dir}>
+    <div dir={dir} className="nemo-sea-page nemo-sea-page--settings">
       <PageHeader
         title={tx("Settings", "الإعدادات")}
         sub={tx(

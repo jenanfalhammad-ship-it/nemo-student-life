@@ -1,0 +1,303 @@
+.nemo-sea-page--reminders {
+  --reminder-coral: #ff9bc9;
+  --reminder-blue: #86dcff;
+  --reminder-lavender: #c5aeff;
+  display: flex;
+  flex-direction: column;
+  gap: 1.45rem;
+  padding: clamp(0.15rem, 1vw, 0.75rem);
+}
+
+.nemo-sea-page--reminders::before {
+  inset: -24px -20px -36px;
+  background:
+    radial-gradient(circle at 5% 12%, #bcefff1c 0 2px, transparent 3px),
+    radial-gradient(circle at 91% 18%, #a9e8ff20 0 3px, transparent 4px),
+    radial-gradient(circle at 84% 78%, #f7a5d51a 0 2px, transparent 3px),
+    radial-gradient(ellipse at 65% 0%, #1266aa33, transparent 46%),
+    radial-gradient(ellipse at 4% 80%, #7d55b328, transparent 40%);
+}
+
+.nemo-sea-page--reminders > .flex:first-child {
+  position: relative;
+  align-items: center;
+  gap: 1.5rem;
+  padding: clamp(1.25rem, 3vw, 2.15rem);
+  overflow: hidden;
+  border: 1px solid #76cfff55;
+  border-radius: 26px;
+  background:
+    radial-gradient(ellipse at 90% 12%, #4f9ee136, transparent 37%),
+    linear-gradient(120deg, #1a2b50f5, #151b38f2 70%);
+  box-shadow:
+    inset 0 1px #ffffff13,
+    0 18px 42px #060d254f;
+}
+
+.nemo-sea-page--reminders > .flex:first-child::after {
+  position: absolute;
+  inset-inline-end: 8%;
+  bottom: -74px;
+  width: 210px;
+  height: 130px;
+  border: 1px solid #83dbff26;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 18px #83dbff0b,
+    0 0 0 38px #83dbff08;
+  content: "";
+  pointer-events: none;
+}
+
+.nemo-sea-page--reminders > .flex:first-child > div:first-child {
+  position: relative;
+  z-index: 1;
+}
+
+.nemo-sea-page--reminders > .flex:first-child > div:first-child > p:first-child {
+  color: var(--reminder-blue);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.nemo-sea-page--reminders h1 {
+  color: #f7f6ff;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.nemo-sea-page--reminders > .flex:first-child > div:first-child > p:last-child {
+  max-width: 39rem;
+  color: #b8c5e4;
+  line-height: 1.7;
+}
+
+.nemo-sea-page--reminders > .flex:first-child > button {
+  position: relative;
+  z-index: 1;
+  min-height: 2.9rem;
+  padding-inline: 1.25rem;
+  border: 1px solid #f9b7dd80;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #b466c3, #6858bf 72%);
+  box-shadow:
+    0 8px 25px #7156bc57,
+    inset 0 1px #ffffff30;
+  color: white;
+}
+
+.nemo-sea-page--reminders > .grid.sm\:grid-cols-3 {
+  gap: 0.9rem;
+}
+
+.nemo-sea-page--reminders > .grid.sm\:grid-cols-3 > div {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #7084bd66;
+  border-radius: 19px;
+  background: linear-gradient(145deg, #202c50ed, #151d3af5);
+  box-shadow:
+    inset 0 1px #ffffff0c,
+    0 10px 26px #07102c4a;
+}
+
+.nemo-sea-page--reminders > .grid.sm\:grid-cols-3 > div:nth-child(2) {
+  border-color: #63c9ed65;
+  background: linear-gradient(145deg, #1b3551ed, #151d3af5);
+}
+
+.nemo-sea-page--reminders > .grid.sm\:grid-cols-3 > div:nth-child(3) {
+  border-color: #df87c253;
+}
+
+.nemo-sea-page--reminders > .grid.sm\:grid-cols-3 > div p:last-child {
+  color: #f4f2ff;
+  font-size: 1.85rem;
+  font-weight: 800;
+}
+
+.nemo-sea-page--reminders > .grid.sm\:grid-cols-3 > div span {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid #a98dff70;
+  border-radius: 14px;
+  background: #8970d128;
+  color: var(--reminder-lavender);
+  filter: drop-shadow(0 0 7px #a88eff44);
+}
+
+.nemo-sea-page--reminders > .grid.sm\:grid-cols-3 > div:nth-child(2) span {
+  border-color: #77dfff69;
+  background: #4ac5e826;
+  color: var(--reminder-blue);
+}
+
+.nemo-sea-page--reminders > .grid.sm\:grid-cols-3 > div:nth-child(3) span {
+  border-color: #ff9bc969;
+  background: #df6cab24;
+  color: var(--reminder-coral);
+}
+
+.nemo-sea-page--reminders > div:has(form) {
+  border: 1px solid #a68cff7a;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #20284af5, #151b36f8);
+  box-shadow:
+    inset 0 1px #ffffff12,
+    0 15px 36px #070e2b52;
+}
+
+.nemo-sea-page--reminders > div:has(form) h3,
+.nemo-sea-page--reminders > div:has(form) [data-slot="card-title"] {
+  color: #f5f1ff;
+}
+
+.nemo-sea-page--reminders > div:has(form) form {
+  gap: 0.8rem;
+}
+
+.nemo-sea-page--reminders > div:has(form) :is(input, textarea, button[role="combobox"]) {
+  min-height: 2.8rem;
+  border-color: #617399b8;
+  border-radius: 12px;
+}
+
+.nemo-sea-page--reminders > div:has(form) textarea {
+  min-height: 6rem;
+}
+
+.nemo-sea-page--reminders > div:last-child {
+  overflow: hidden;
+  border: 1px solid #7082b66b;
+  border-radius: 23px;
+  background:
+    radial-gradient(ellipse at 100% 0%, #36588b20, transparent 42%),
+    linear-gradient(145deg, #1b2342f5, #141b35f7);
+  box-shadow:
+    inset 0 1px #ffffff10,
+    0 16px 38px #070e2b4a;
+  backdrop-filter: blur(14px);
+}
+
+.nemo-sea-page--reminders > div:last-child > div:first-child {
+  padding-bottom: 1.15rem;
+}
+
+.nemo-sea-page--reminders > div:last-child [data-slot="card-title"] {
+  color: #f2f0ff;
+  font-size: 1.2rem;
+  font-weight: 750;
+}
+
+.nemo-sea-page--reminders > div:last-child input {
+  border-radius: 14px;
+  border-color: #5b6f9b;
+  background: #101a34db;
+}
+
+.nemo-sea-page--reminders > div:last-child > div:first-child > div:last-child button {
+  min-height: 2rem;
+  border-radius: 999px;
+  border-color: #6878a186;
+  background: #192444b5;
+  color: #c8d0e8;
+  transition: 160ms ease;
+}
+
+.nemo-sea-page--reminders > div:last-child > div:first-child > div:last-child button:hover {
+  border-color: #a993ff9c;
+  background: #443e798a;
+  color: #fff;
+}
+
+.nemo-sea-page--reminders > div:last-child > div:first-child > div:last-child button.bg-primary {
+  border-color: #b6a5ffb3;
+  background: linear-gradient(130deg, #7165c9, #514a9d);
+  color: #fff;
+  box-shadow: 0 0 16px #8d79ed38;
+}
+
+.nemo-sea-page--reminders > div:last-child > div:last-child > div:not(:only-child) {
+  border-color: #52668d9c;
+  border-radius: 16px;
+  background: linear-gradient(115deg, #202d50ba, #17213db8);
+  box-shadow: inset 0 1px #ffffff09;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.nemo-sea-page--reminders > div:last-child > div:last-child > div:not(:only-child):hover {
+  border-color: #86c8e985;
+  background: #253457e8;
+  transform: translateY(-1px);
+}
+
+.nemo-sea-page--reminders
+  > div:last-child
+  > div:last-child
+  > div:not(:only-child)
+  > div:nth-child(2)
+  > div:first-child
+  > span:first-of-type {
+  border: 1px solid #8c83c64f;
+  background: #7773ba25;
+  color: #d4ccff;
+}
+
+.nemo-sea-page--reminders
+  > div:last-child
+  > div:last-child
+  > div:not(:only-child)
+  > button:first-child {
+  border: 1px solid #78d8f654;
+  background: #183651;
+  color: #9ce8ff;
+}
+
+.nemo-sea-page--reminders svg {
+  stroke-width: 2;
+}
+
+.nemo-sea-page--reminders :is(button, input, textarea, [role="combobox"]):focus-visible {
+  outline: 2px solid #9edfff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px #78cfff28;
+}
+
+@media (max-width: 640px) {
+  .nemo-sea-page--reminders {
+    gap: 1rem;
+    padding-inline: 0;
+  }
+
+  .nemo-sea-page--reminders > .flex:first-child {
+    align-items: stretch;
+    padding: 1.2rem;
+    border-radius: 20px;
+  }
+
+  .nemo-sea-page--reminders > .flex:first-child > button {
+    align-self: flex-start;
+  }
+
+  .nemo-sea-page--reminders > div:last-child > div:last-child > div:not(:only-child) {
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding: 0.7rem;
+  }
+
+  .nemo-sea-page--reminders
+    > div:last-child
+    > div:last-child
+    > div:not(:only-child)
+    > div:nth-child(2) {
+    padding-top: 0.35rem;
+  }
+}

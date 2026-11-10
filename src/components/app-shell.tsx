@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { useI18n, type TKey } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
+import "@/nemo-sea-theme.css";
 import nemoMascot from "@/assets/nemo-goggles-mascot.webp";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";

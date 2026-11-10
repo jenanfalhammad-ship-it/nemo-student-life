@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LoaderCircle, Save } from "lucide-react";
+import { LoaderCircle, Save, ShieldCheck, UserRound, Waves } from "lucide-react";
 import { toast } from "sonner";
 import { Field, PageHeader } from "@/components/kit";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile, useSaveProfile, useUpdate } from "@/lib/data";
 import { useTx } from "@/lib/tx";
+import "@/page-themes/profile.css";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
@@ -88,7 +89,7 @@ function Profile() {
   };
 
   return (
-    <div dir={dir}>
+    <div dir={dir} className="nemo-sea-page nemo-sea-page--profile">
       <PageHeader
         title={tx("Profile", "الملف الشخصي")}
         sub={tx(
@@ -97,85 +98,114 @@ function Profile() {
         )}
       />
       {isLoading || authLoading ? (
-        <p className="text-sm text-muted-foreground">
+        <p className="profile-load-state text-sm">
           {tx("Loading your profile…", "جارٍ تحميل ملفك الشخصي…")}
         </p>
       ) : error ? (
-        <div
-          role="alert"
-          className="rounded-xl border border-destructive/40 p-4 text-sm text-destructive"
-        >
+        <div role="alert" className="profile-error rounded-xl border p-4 text-sm">
           {tx(
             "Your profile could not be loaded. Refresh the page and try again.",
             "تعذّر تحميل ملفك الشخصي. حدّث الصفحة وحاول مرة أخرى.",
           )}
         </div>
       ) : (
-        <form
-          onSubmit={(event) => void save(event)}
-          className="card-soft grid max-w-2xl gap-4 p-5 sm:grid-cols-2 sm:p-6"
-        >
-          <Field label={tx("Account email", "بريد الحساب")}>
-            <Input
-              value={user?.email ?? ""}
-              readOnly
-              aria-label={tx("Account email", "بريد الحساب")}
-              dir="ltr"
-            />
-          </Field>
-          <Field label={tx("Display name", "الاسم الظاهر")}>
-            <Input
-              id="profile-display-name"
-              aria-label={tx("Display name", "الاسم الظاهر")}
-              value={form.display_name}
-              onChange={set("display_name")}
-              autoComplete="name"
-            />
-          </Field>
-          <Field label={tx("University", "الجامعة")}>
-            <Input
-              id="profile-university"
-              aria-label={tx("University", "الجامعة")}
-              value={form.university}
-              onChange={set("university")}
-              autoComplete="organization"
-            />
-          </Field>
-          <Field label={tx("Major", "التخصص")}>
-            <Input
-              id="profile-major"
-              aria-label={tx("Major", "التخصص")}
-              value={form.major}
-              onChange={set("major")}
-            />
-          </Field>
-          <Field label={tx("Current semester", "الفصل الدراسي الحالي")}>
-            <Input
-              id="profile-semester"
-              aria-label={tx("Current semester", "الفصل الدراسي الحالي")}
-              value={form.semester}
-              onChange={set("semester")}
-            />
-          </Field>
-          <Field label={tx("Study goal", "الهدف الدراسي")} className="sm:col-span-2">
-            <Input
-              id="profile-study-goal"
-              aria-label={tx("Study goal", "الهدف الدراسي")}
-              value={form.study_goal}
-              onChange={set("study_goal")}
-            />
-          </Field>
-          <div className="sm:col-span-2">
-            <Button type="submit" disabled={saving}>
-              {saving ? (
-                <LoaderCircle className="h-4 w-4 animate-spin" />
-              ) : (
-                <Save className="h-4 w-4" />
+        <div className="profile-layout">
+          <aside className="profile-identity" aria-label={tx("Profile", "الملف الشخصي")}>
+            <div className="profile-avatar" aria-hidden="true">
+              <UserRound />
+            </div>
+            <h2>{form.display_name || tx("Profile", "الملف الشخصي")}</h2>
+            <p>
+              {tx(
+                "View and update the information stored in your NEMO profile.",
+                "اعرض المعلومات المحفوظة في ملفك الشخصي على نيمو وعدّلها.",
               )}
-              {saving ? tx("Saving…", "جارٍ الحفظ…") : tx("Save profile", "حفظ الملف الشخصي")}
-            </Button>
-          </div>
-        </form>
+            </p>
+            <div className="profile-identity-mark">
+              <ShieldCheck aria-hidden="true" />
+              <span>{tx("Account email", "بريد الحساب")}</span>
+            </div>
+          </aside>
+
+          <form onSubmit={(event) => void save(event)} className="profile-form-card">
+            <div className="profile-form-heading">
+              <span aria-hidden="true">
+                <Waves />
+              </span>
+              <div>
+                <h2>{tx("Profile", "الملف الشخصي")}</h2>
+                <p>
+                  {tx(
+                    "View and update the information stored in your NEMO profile.",
+                    "اعرض المعلومات المحفوظة في ملفك الشخصي على نيمو وعدّلها.",
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="profile-fields">
+              <Field label={tx("Account email", "بريد الحساب")}>
+                <Input
+                  value={user?.email ?? ""}
+                  readOnly
+                  aria-label={tx("Account email", "بريد الحساب")}
+                  dir="ltr"
+                />
+              </Field>
+              <Field label={tx("Display name", "الاسم الظاهر")}>
+                <Input
+                  id="profile-display-name"
+                  aria-label={tx("Display name", "الاسم الظاهر")}
+                  value={form.display_name}
+                  onChange={set("display_name")}
+                  autoComplete="name"
+                />
+              </Field>
+              <Field label={tx("University", "الجامعة")}>
+                <Input
+                  id="profile-university"
+                  aria-label={tx("University", "الجامعة")}
+                  value={form.university}
+                  onChange={set("university")}
+                  autoComplete="organization"
+                />
+              </Field>
+              <Field label={tx("Major", "التخصص")}>
+                <Input
+                  id="profile-major"
+                  aria-label={tx("Major", "التخصص")}
+                  value={form.major}
+                  onChange={set("major")}
+                />
+              </Field>
+              <Field label={tx("Current semester", "الفصل الدراسي الحالي")}>
+                <Input
+                  id="profile-semester"
+                  aria-label={tx("Current semester", "الفصل الدراسي الحالي")}
+                  value={form.semester}
+                  onChange={set("semester")}
+                />
+              </Field>
+              <Field label={tx("Study goal", "الهدف الدراسي")} className="profile-field-wide">
+                <Input
+                  id="profile-study-goal"
+                  aria-label={tx("Study goal", "الهدف الدراسي")}
+                  value={form.study_goal}
+                  onChange={set("study_goal")}
+                />
+              </Field>
+            </div>
+            <div className="profile-save-row">
+              <Button type="submit" disabled={saving}>
+                {saving ? (
+                  <LoaderCircle className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4" />
+                )}
+                {saving ? tx("Saving…", "جارٍ الحفظ…") : tx("Save profile", "حفظ الملف الشخصي")}
+              </Button>
+            </div>
+          </form>
+        </div>
       )}
     </div>
   );

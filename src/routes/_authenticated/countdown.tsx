@@ -14,6 +14,7 @@ import {
 import { toLocalInput, fromLocalInput, useInsert, useRemove, useRows, useUpdate } from "@/lib/data";
 import { useTx } from "@/lib/tx";
 import type { Row } from "@/lib/data";
+import "@/page-themes/countdown.css";
 
 export const Route = createFileRoute("/_authenticated/countdown")({
   head: () => ({
@@ -110,8 +111,8 @@ function CountdownPage() {
     (a, b) => new Date(a.target_at).getTime() - new Date(b.target_at).getTime(),
   )[0];
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+    <div className="nemo-sea-page nemo-sea-page--countdown countdown-layout space-y-6">
+      <div className="countdown-heading flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <p className="text-sm font-medium text-primary">
             {tx("Count down to what matters", "عدّ للأشياء المهمة في حياتك")}
@@ -133,7 +134,7 @@ function CountdownPage() {
       </div>
       {closest && (
         <Card
-          className="overflow-hidden border-0 text-primary-foreground shadow-md"
+          className="countdown-feature overflow-hidden border-0 text-primary-foreground shadow-md"
           style={{
             background: `linear-gradient(120deg, ${closest.color}, color-mix(in srgb, ${closest.color} 65%, #111827))`,
           }}
@@ -158,7 +159,7 @@ function CountdownPage() {
           </CardContent>
         </Card>
       )}
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="countdown-metrics grid gap-3 sm:grid-cols-3">
         <Metric
           label={tx("All countdowns", "كل المواعيد")}
           value={countdowns.length}
@@ -172,7 +173,7 @@ function CountdownPage() {
         />
       </div>
       {showForm && (
-        <Card className="border-primary/30">
+        <Card className="countdown-form border-primary/30">
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-lg">
               {editing
@@ -259,7 +260,7 @@ function CountdownPage() {
           </CardContent>
         </Card>
       )}
-      <Card>
+      <Card className="countdown-list">
         <CardHeader className="gap-4">
           <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <CardTitle>{tx("All dates", "كل المواعيد")}</CardTitle>
@@ -315,12 +316,12 @@ function CountdownPage() {
               </p>
             </div>
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="countdown-grid grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {filtered.map((item) => {
                 const course = courses.find((c) => c.id === item.course_id);
                 const passed = new Date(item.target_at).getTime() < now;
                 return (
-                  <Card key={item.id} className="overflow-hidden">
+                  <Card key={item.id} className="countdown-item overflow-hidden">
                     <div className="h-1.5" style={{ backgroundColor: item.color }} />
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between gap-2">
@@ -415,7 +416,7 @@ function CountdownParts({
       {tx("This date has passed", "انقضى هذا الموعد")}
     </p>
   ) : (
-    <div className={`mt-3 flex gap-2 ${prominent ? "text-center" : ""}`}>
+    <div className={`countdown-parts mt-3 flex gap-2 ${prominent ? "text-center" : ""}`}>
       {[
         [days, tx("days", "يوم")],
         [hours, tx("hours", "ساعة")],
@@ -423,7 +424,7 @@ function CountdownParts({
       ].map(([num, label]) => (
         <div
           key={String(label)}
-          className={`rounded-lg ${prominent ? "bg-white/15 px-4 py-2" : "bg-muted px-3 py-2"}`}
+          className={`countdown-part rounded-lg ${prominent ? "bg-white/15 px-4 py-2" : "bg-muted px-3 py-2"}`}
         >
           <strong className={`${prominent ? "text-xl" : "text-lg"}`}>
             {Number(num).toLocaleString()}
@@ -436,7 +437,7 @@ function CountdownParts({
 }
 function Metric({ label, value, icon }: { label: string; value: number; icon: React.ReactNode }) {
   return (
-    <Card>
+    <Card className="countdown-metric">
       <CardContent className="flex items-center justify-between p-4">
         <div>
           <p className="text-sm text-muted-foreground">{label}</p>

@@ -1,0 +1,350 @@
+.nemo-sea-page--calendar {
+  --calendar-surface: linear-gradient(148deg, #1c2849f5, #151c37f5 76%);
+  --calendar-border: #59688f9c;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.nemo-sea-page--calendar::before {
+  inset: -22px -18px -34px;
+  background:
+    radial-gradient(circle at 6% 12%, #b9efff1e 0 2px, transparent 2.8px),
+    radial-gradient(circle at 95% 17%, #b9efff18 0 3px, transparent 3.8px),
+    radial-gradient(circle at 80% 79%, #f395d91a 0 2px, transparent 3px),
+    radial-gradient(ellipse at 63% 0%, #174b8e45, transparent 46%),
+    radial-gradient(ellipse at 8% 84%, #713f8730, transparent 35%);
+}
+
+.nemo-sea-page--calendar .calendar-heading {
+  position: relative;
+  padding: 0.45rem 0.2rem 0.2rem;
+}
+
+.nemo-sea-page--calendar .calendar-heading > div:first-child > p:first-child {
+  color: #c9b6ff;
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.035em;
+}
+
+.nemo-sea-page--calendar .calendar-heading h1 {
+  color: #f6f5ff;
+  font-size: clamp(1.8rem, 3vw, 2.55rem);
+  font-weight: 820;
+  letter-spacing: -0.045em;
+  text-shadow: 0 0 30px #779eff24;
+}
+
+.nemo-sea-page--calendar .calendar-heading > div:first-child > p:nth-of-type(2) {
+  max-width: 40rem;
+  color: #b8c5e4;
+}
+
+.nemo-sea-page--calendar .calendar-heading > div:first-child > div span {
+  border: 1px solid #8390c150;
+  background: linear-gradient(135deg, #202d52, #241e47);
+  color: #ddd4ff;
+  box-shadow:
+    inset 0 1px #ffffff0c,
+    0 5px 18px #090e2830;
+}
+
+.nemo-sea-page--calendar .calendar-heading > div:first-child > div span + span {
+  border-color: #f292c553;
+  background: linear-gradient(135deg, #482b54, #302144);
+  color: #ffc1df;
+}
+
+.nemo-sea-page--calendar .calendar-heading > button,
+.nemo-sea-page--calendar .calendar-agenda button[class*="bg-primary"] {
+  border: 1px solid #d7a0ff75;
+  border-radius: 14px;
+  background: linear-gradient(130deg, #7461d1, #51489f 65%, #644284);
+  color: #fff;
+  box-shadow:
+    inset 0 1px #ffffff2c,
+    0 8px 24px #7557d344;
+}
+
+.nemo-sea-page--calendar :is(.calendar-board, .calendar-agenda, .calendar-form) {
+  overflow: hidden;
+  border: 1px solid var(--calendar-border);
+  border-radius: 23px;
+  background: var(--calendar-surface);
+  color: #f1f3ff;
+  box-shadow:
+    inset 0 1px #ffffff0e,
+    0 16px 38px #070d253d;
+  backdrop-filter: blur(16px);
+}
+
+.nemo-sea-page--calendar
+  :is(
+    .calendar-board-header,
+    .calendar-agenda > div:first-child,
+    .calendar-form > div:first-child
+  ) {
+  padding: 1.15rem 1.25rem 0.85rem;
+}
+
+.nemo-sea-page--calendar .calendar-board-header > div:first-child {
+  min-height: 2.65rem;
+}
+
+.nemo-sea-page--calendar .calendar-board-header :is(button, [role="combobox"]),
+.nemo-sea-page--calendar
+  .calendar-agenda
+  :is(
+    button[aria-label="Edit"],
+    button[aria-label="تعديل"],
+    button[aria-label="Delete"],
+    button[aria-label="حذف"]
+  ) {
+  border-color: #6d7aa2a3;
+  border-radius: 11px;
+  background-color: #202b4b;
+  color: #e8eaff;
+}
+
+.nemo-sea-page--calendar .calendar-board-header :is(button, [role="combobox"]):hover,
+.nemo-sea-page--calendar
+  .calendar-agenda
+  :is(
+    button[aria-label="Edit"],
+    button[aria-label="تعديل"],
+    button[aria-label="Delete"],
+    button[aria-label="حذف"]
+  ):hover {
+  border-color: #b29cffaa;
+  background-color: #32335d;
+  color: #fff;
+}
+
+.nemo-sea-page--calendar :is(.calendar-board, .calendar-agenda, .calendar-form) h2 {
+  color: #f3f2ff;
+}
+
+.nemo-sea-page--calendar
+  :is(.calendar-board, .calendar-agenda, .calendar-form)
+  .text-muted-foreground {
+  color: #aebbd9;
+}
+
+.nemo-sea-page--calendar .calendar-board > div:last-child {
+  padding: 0 1.2rem 1.2rem;
+}
+
+.nemo-sea-page--calendar .calendar-weekdays {
+  border-color: #66739a83;
+  padding-bottom: 0.65rem;
+}
+
+.nemo-sea-page--calendar .calendar-weekdays > div {
+  color: #c9b5ff;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.nemo-sea-page--calendar .calendar-grid {
+  overflow: hidden;
+  margin-top: 0.65rem;
+  border: 1px solid #5361868a;
+  border-radius: 17px;
+  background: #111a34a8;
+}
+
+.nemo-sea-page--calendar .calendar-day {
+  min-width: 0;
+  min-height: 5.7rem;
+  border-color: #56618770;
+  background: linear-gradient(160deg, #192444b8, #151e38a8);
+  color: #eef1ff;
+  transition:
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.nemo-sea-page--calendar .calendar-day:nth-child(7n) {
+  border-inline-end: 0;
+}
+.nemo-sea-page--calendar .calendar-day:hover {
+  background: linear-gradient(150deg, #283760, #29264c);
+}
+.nemo-sea-page--calendar .calendar-day[class*="text-muted-foreground"] {
+  color: #8c9ab9;
+  background: #111a2e9c;
+}
+.nemo-sea-page--calendar .calendar-day[class*="bg-primary/5"] {
+  z-index: 1;
+  border-radius: 9px;
+  background: linear-gradient(145deg, #50468d8a, #27345a);
+  box-shadow:
+    inset 0 0 0 1px #b4a2ff9c,
+    0 0 18px #8a76ff29;
+}
+
+.nemo-sea-page--calendar .calendar-day > span:first-child {
+  font-size: 0.83rem;
+  font-weight: 650;
+}
+
+.nemo-sea-page--calendar .calendar-day > span:first-child[class*="bg-primary"] {
+  border: 1px solid #ffc0df99;
+  background: linear-gradient(145deg, #ff9bc4, #ca6ec2);
+  color: #241a3e;
+  box-shadow: 0 0 15px #ff94cc64;
+}
+
+.nemo-sea-page--calendar .calendar-day > span:nth-child(2) {
+  min-height: 0.4rem;
+}
+.nemo-sea-page--calendar .calendar-day > span:nth-child(2) span.rounded-full {
+  border: 1px solid #e9c6ff99;
+  background: #c6a7ff;
+  box-shadow: 0 0 7px #aa8dffbc;
+}
+.nemo-sea-page--calendar .calendar-day > span:nth-child(2) span.rounded-full:nth-child(2n) {
+  border-color: #ffc2dc;
+  background: #ff8fbd;
+  box-shadow: 0 0 7px #fa81b5a6;
+}
+.nemo-sea-page--calendar .calendar-day > span:last-child {
+  color: #bdc9e7;
+  font-size: 0.64rem;
+  line-height: 1.2;
+}
+
+.nemo-sea-page--calendar .calendar-agenda > div:last-child {
+  padding: 0 1.15rem 1.2rem;
+}
+.nemo-sea-page--calendar .calendar-agenda > div:first-child {
+  align-items: center;
+  border-bottom: 1px solid #65729a55;
+  margin-bottom: 0.85rem;
+}
+.nemo-sea-page--calendar .calendar-agenda > div:first-child p:first-child {
+  color: #c9b8ff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+.nemo-sea-page--calendar .calendar-agenda > div:first-child h2 {
+  line-height: 1.3;
+}
+.nemo-sea-page--calendar .calendar-event {
+  border-color: #64729a99;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at 100% 0%, #4f4b8530, transparent 58%),
+    linear-gradient(145deg, #222d4c, #19223e);
+  box-shadow:
+    inset 0 1px #ffffff0d,
+    0 7px 20px #090e2733;
+}
+.nemo-sea-page--calendar .calendar-event > div:first-child > div:first-child p:first-child {
+  color: #f5f3ff;
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+.nemo-sea-page--calendar .calendar-event > div:first-child > div:first-child p:nth-child(2) {
+  color: #f3a6d2;
+}
+.nemo-sea-page--calendar .calendar-event svg {
+  color: #9bdcff;
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 5px #6dcaff56);
+}
+.nemo-sea-page--calendar
+  .calendar-event
+  :is(button[aria-label="Delete"], button[aria-label="حذف"])
+  svg {
+  color: #ff9fbe;
+}
+.nemo-sea-page--calendar .calendar-agenda > div:last-child > div.rounded-xl.border-dashed {
+  border-color: #7887b17d;
+  border-radius: 17px;
+  background: radial-gradient(ellipse at 50% 0%, #3e4e7c35, transparent 68%), #121b35a8;
+  color: #e8eaff;
+}
+.nemo-sea-page--calendar .calendar-agenda > div:last-child > div.rounded-xl.border-dashed svg {
+  color: #9fe5ff;
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 8px #74cfff7a);
+}
+
+.nemo-sea-page--calendar .calendar-form {
+  border-color: #a879d6a1;
+}
+.nemo-sea-page--calendar .calendar-form input,
+.nemo-sea-page--calendar .calendar-form textarea,
+.nemo-sea-page--calendar .calendar-form [role="combobox"] {
+  border-color: #66749bc4;
+  border-radius: 12px;
+  background: #111a33;
+  color: #f5f3ff;
+}
+.nemo-sea-page--calendar .calendar-form input:focus-visible,
+.nemo-sea-page--calendar .calendar-form textarea:focus-visible {
+  outline: 2px solid #b79cff;
+  outline-offset: 1px;
+}
+.nemo-sea-page--calendar svg {
+  stroke-width: 2.15;
+}
+
+@media (min-width: 1280px) {
+  .nemo-sea-page--calendar .calendar-agenda {
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .nemo-sea-page--calendar {
+    gap: 1rem;
+  }
+  .nemo-sea-page--calendar .calendar-heading {
+    padding-inline: 0;
+  }
+  .nemo-sea-page--calendar
+    :is(
+      .calendar-board-header,
+      .calendar-agenda > div:first-child,
+      .calendar-form > div:first-child
+    ) {
+    padding: 1rem 0.85rem 0.75rem;
+  }
+  .nemo-sea-page--calendar .calendar-board > div:last-child,
+  .nemo-sea-page--calendar .calendar-agenda > div:last-child {
+    padding-inline: 0.75rem;
+  }
+  .nemo-sea-page--calendar .calendar-day {
+    min-height: 4.4rem;
+    padding: 0.3rem 0.15rem;
+    gap: 0.15rem;
+  }
+  .nemo-sea-page--calendar .calendar-day > span:first-child {
+    height: 1.65rem;
+    width: 1.65rem;
+    font-size: 0.72rem;
+  }
+  .nemo-sea-page--calendar .calendar-weekdays > div {
+    font-size: 0.62rem;
+  }
+  .nemo-sea-page--calendar .calendar-grid {
+    border-radius: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nemo-sea-page--calendar *,
+  .nemo-sea-page--calendar *::before,
+  .nemo-sea-page--calendar *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

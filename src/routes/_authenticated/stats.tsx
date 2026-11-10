@@ -15,6 +15,8 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { useTx } from "@/lib/tx";
 
+import "@/page-themes/stats.css";
+
 export const Route = createFileRoute("/_authenticated/stats")({
   head: () => ({
     meta: [
@@ -112,7 +114,7 @@ function StatsPage() {
   return (
     <main
       dir={lang === "ar" ? "rtl" : "ltr"}
-      className="mx-auto w-full max-w-6xl px-3 pb-10 sm:px-6"
+      className="nemo-sea-page nemo-sea-page--stats mx-auto w-full max-w-6xl px-3 pb-10 sm:px-6"
     >
       <PageHeader
         title={tx("Study statistics", "إحصاءات الدراسة")}

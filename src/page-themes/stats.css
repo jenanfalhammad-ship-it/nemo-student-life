@@ -1,0 +1,37 @@
+/* Recorded study metrics as a luminous data observatory. */
+.nemo-sea-page--stats {
+  padding-top: 0.15rem;
+}
+.nemo-sea-page--stats h1 {
+  color: #f3f2ff;
+  font-size: clamp(1.7rem, 2.4vw, 2.35rem);
+}
+.nemo-sea-page--stats .card-soft {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+.nemo-sea-page--stats .card-soft:hover {
+  transform: translateY(-2px);
+  border-color: #887ee1;
+}
+.nemo-sea-page--stats .card-soft svg {
+  color: #c4a6ff;
+  filter: drop-shadow(0 0 6px #9378ff55);
+}
+.nemo-sea-page--stats .grid.h-52 > div > div:nth-child(2) {
+  background: #212949;
+}
+.nemo-sea-page--stats .grid.h-52 > div > div:nth-child(2) > div {
+  background: linear-gradient(180deg, #d090f5, #7466e8 72%, #45c8ef);
+  box-shadow: 0 0 14px #9571fb66;
+}
+.nemo-sea-page--stats table thead tr {
+  border-color: #556080;
+}
+.nemo-sea-page--stats table tbody tr {
+  border-color: #46516f;
+}
+.nemo-sea-page--stats th {
+  color: #b7c0dc;
+}

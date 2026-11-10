@@ -1,0 +1,36 @@
+/* The animal habitat blends into the deep-sea palette while preserving its real map. */
+.nemo-sea-page--zoo h1 {
+  color: #f3f2ff;
+  font-size: clamp(1.7rem, 2.4vw, 2.35rem);
+}
+.nemo-sea-page--zoo > section:nth-of-type(2) {
+  border-color: #526087;
+  background: #141d39;
+  box-shadow: 0 16px 40px #070d2955;
+}
+.nemo-sea-page--zoo > section:nth-of-type(2) > div:first-child {
+  border-color: #4c577b;
+  background: linear-gradient(105deg, #29224f, #163f63 55%, #30254f);
+}
+.nemo-sea-page--zoo .zoo-map {
+  box-shadow: inset 0 0 80px #0d183355;
+}
+.nemo-sea-page--zoo .zoo-map::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 52% 0%, #8ae0ff18, transparent 50%),
+    linear-gradient(180deg, #101a3420, #11183536);
+  content: "";
+}
+.nemo-sea-page--zoo .card-soft {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+.nemo-sea-page--zoo .card-soft:hover {
+  transform: translateY(-2px);
+  border-color: #8b80d6;
+}
